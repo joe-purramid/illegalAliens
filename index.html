@@ -178,7 +178,7 @@ select option{background:var(--bg2);color:var(--text)}
     <div style="display:flex;gap:8px;justify-content:center">
       <button class="btn" id="ready-btn" onclick="toggleReady()" disabled>READY</button>
       <button class="btn yellow" id="start-btn" onclick="startGame()" style="display:none">LAUNCH</button>
-      <button class="btn pink small" onclick="leaveRoom()">LEAVE</button>
+      <button class="btn pink small" onclick="leaveWaitingRoom()">LEAVE</button>
     </div>
   </div>
 </div>
@@ -205,6 +205,9 @@ select option{background:var(--bg2);color:var(--text)}
     <div class="side-panel">
       <h3>Log</h3>
       <div class="log" id="game-log"></div>
+    </div>
+    <div style="text-align:center;padding:8px 0">
+      <button class="btn small pink" onclick="confirmAbandon()">🚪 ABANDON GAME</button>
     </div>
   </div>
 </div>
@@ -273,7 +276,7 @@ function closeModal(){document.getElementById('modal-overlay').classList.remove(
 
 // Password
 document.getElementById('pw-input').addEventListener('keydown',e=>{if(e.key==='Enter')checkPassword()});
-function checkPassword(){if(document.getElementById('pw-input').value.trim().toLowerCase()==='phatphlamingo'){showScreen('lobby');refreshRooms()}else document.getElementById('pw-error').style.display='block'}
+function checkPassword(){if(document.getElementById('pw-input').value.trim().toLowerCase()==='phatphlamingo'){showScreen('lobby');const sn=localStorage.getItem('ia_name');if(sn)document.getElementById('player-name').value=sn;refreshRooms()}else document.getElementById('pw-error').style.display='block'}
 
 // Lobby
 function refreshRooms(){
@@ -291,10 +294,11 @@ function refreshRooms(){
     if(!list.children.length)list.innerHTML='<p style="color:var(--dim);font-size:12px;text-align:center;padding:20px 0">No rooms found</p>';
   });
 }
-function createRoom(){myName=document.getElementById('player-name').value.trim();if(!myName){toast('Enter a name first!');return}const rid=genId().substr(0,6).toUpperCase();db.ref('illegalAliens/rooms/'+rid).set({name:'Room '+rid,host:myId,status:'waiting',created:Date.now(),players:{[myId]:{name:myName,color:null,ready:false}}}).then(()=>enterRoom(rid))}
-function joinRoom(rid){myName=document.getElementById('player-name').value.trim();if(!myName){toast('Enter a name first!');return}db.ref('illegalAliens/rooms/'+rid+'/players/'+myId).set({name:myName,color:null,ready:false}).then(()=>enterRoom(rid))}
-function enterRoom(rid){currentRoom=rid;roomRef=db.ref('illegalAliens/rooms/'+rid);document.getElementById('room-code-display').textContent='ROOM: '+rid;showScreen('room');roomRef.on('value',snap=>{roomData=snap.val();if(!roomData){leaveRoom();return}if(roomData.status==='playing')initGame();else renderRoom()});roomRef.child('players/'+myId).onDisconnect().remove()}
-function leaveRoom(){if(roomRef){roomRef.child('players/'+myId).remove();roomRef.off()}currentRoom=null;roomRef=null;roomData=null;showScreen('lobby');refreshRooms()}
+function createRoom(){myName=document.getElementById('player-name').value.trim();if(!myName){toast('Enter a name first!');return}localStorage.setItem('ia_name',myName);const rid=genId().substr(0,6).toUpperCase();db.ref('illegalAliens/rooms/'+rid).set({name:'Room '+rid,host:myId,status:'waiting',created:Date.now(),players:{[myId]:{name:myName,color:null,ready:false}}}).then(()=>enterRoom(rid))}
+function joinRoom(rid){myName=document.getElementById('player-name').value.trim();if(!myName){toast('Enter a name first!');return}localStorage.setItem('ia_name',myName);db.ref('illegalAliens/rooms/'+rid+'/players/'+myId).set({name:myName,color:null,ready:false}).then(()=>enterRoom(rid))}
+function enterRoom(rid){currentRoom=rid;roomRef=db.ref('illegalAliens/rooms/'+rid);document.getElementById('room-code-display').textContent='ROOM: '+rid;localStorage.setItem('ia_room',rid);showScreen('room');roomRef.on('value',snap=>{roomData=snap.val();if(!roomData){leaveRoom();return}if(roomData.status==='playing')initGame();else renderRoom()})}
+function leaveRoom(){if(roomRef){roomRef.off()}currentRoom=null;roomRef=null;roomData=null;gameListeners=[];localStorage.removeItem('ia_room');showScreen('lobby');refreshRooms()}
+function leaveWaitingRoom(){if(roomRef)roomRef.child('players/'+myId).remove();leaveRoom()}
 
 function renderRoom(){
   if(!roomData||!roomData.players)return;
@@ -610,7 +614,50 @@ function onNodeClick(nid){if(!isMyTurn()||roomData.phase!=='flee'||!getValidMove
 function endFlee(){advanceToHarvest()}
 function advanceToHarvest(){const cp=cpData(),nm=isPlace(cp.position)?positions[cp.position].name:'a step';addLog('<span>'+cp.name+'</span> stops at '+nm+'.');selectedCards.clear();roomRef.update({phase:'harvest',stepsRemaining:0})}
 
-window.addEventListener('load',()=>document.getElementById('pw-input').focus());
+function confirmAbandon(){
+  showModal('<h3>ABANDON GAME?</h3><p style="text-align:center;color:var(--dim);margin:12px 0">You will be removed from this game and cannot rejoin.</p><div style="display:flex;gap:10px;justify-content:center"><button class="btn pink" onclick="closeModal();abandonGame()">ABANDON</button><button class="btn small" onclick="closeModal()">CANCEL</button></div>');
+}
+
+function abandonGame(){
+  if(!roomRef||!roomData)return;
+  const me=roomData.players[myId];
+  if(me)addLog('<span>'+me.name+'</span> has abandoned the game.');
+  // If it's this player's turn during an active game, advance to next
+  if(roomData.status==='playing'&&roomData.turnOrder){
+    const wasMyTurn=roomData.turnOrder[roomData.currentTurn]===myId;
+    // Mark as eliminated
+    roomRef.child('players/'+myId+'/eliminated').set(true);
+    if(wasMyTurn){
+      // Advance turn
+      let n=(roomData.currentTurn+1)%roomData.turnOrder.length,s=0;
+      while(s<10){const pid=roomData.turnOrder[n];const p=roomData.players[pid];if(pid!==myId&&!p.eliminated)break;n=(n+1)%roomData.turnOrder.length;s++}
+      roomRef.update({currentTurn:n,phase:'ready',movementValue:0,stepsThisTurn:[],stepsRemaining:0});
+    }
+  } else {
+    roomRef.child('players/'+myId).remove();
+  }
+  leaveRoom();
+}
+
+window.addEventListener('load',()=>{
+  // Check for existing session to reconnect
+  const savedRoom=localStorage.getItem('ia_room');
+  if(savedRoom){
+    db.ref('illegalAliens/rooms/'+savedRoom).once('value',snap=>{
+      const data=snap.val();
+      if(data&&data.players&&data.players[myId]&&data.status!=='finished'){
+        // Reconnect: skip password, go straight to room
+        myName=data.players[myId].name;
+        enterRoom(savedRoom);
+      } else {
+        localStorage.removeItem('ia_room');
+        document.getElementById('pw-input').focus();
+      }
+    });
+  } else {
+    document.getElementById('pw-input').focus();
+  }
+});
 </script>
 </body>
 </html>
