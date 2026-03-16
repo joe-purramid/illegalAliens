@@ -227,7 +227,18 @@ document.getElementById('pw-input').addEventListener('keydown',e=>{if(e.key==='E
 function checkPassword(){if(document.getElementById('pw-input').value.trim().toLowerCase()==='phatphlamingo'){showScreen('lobby');const sn=localStorage.getItem('ia_name');if(sn)document.getElementById('player-name').value=sn;refreshRooms()}else document.getElementById('pw-error').style.display='block'}
 
 // Lobby
-function refreshRooms(){db.ref('illegalAliens/rooms').once('value',snap=>{const list=document.getElementById('room-list'),rooms=snap.val();if(!rooms){list.innerHTML='<p style="color:var(--dim);font-size:12px;text-align:center;padding:20px 0">No rooms found</p>';return}list.innerHTML='';Object.entries(rooms).forEach(([id,r])=>{if(r.status==='finished')return;const n=r.players?Object.keys(r.players).length:0;const d=document.createElement('div');d.className='room-item';d.innerHTML='<div><span class="rname">'+(r.name||id)+'</span> <span class="rcount">'+n+'/6</span></div><button class="btn small" onclick="joinRoom(\''+id+'\')" '+(r.status!=='waiting'||n>=6?'disabled':'')+'>JOIN</button>';list.appendChild(d)});if(!list.children.length)list.innerHTML='<p style="color:var(--dim);font-size:12px;text-align:center;padding:20px 0">No rooms found</p>'})}
+function refreshRooms(){db.ref('illegalAliens/rooms').once('value',snap=>{const list=document.getElementById('room-list'),rooms=snap.val();if(!rooms){list.innerHTML='<p style="color:var(--dim);font-size:12px;text-align:center;padding:20px 0">No rooms found</p>';return}list.innerHTML='';const now=Date.now(),STALE_MS=60*60*1000;
+  Object.entries(rooms).forEach(([id,r])=>{
+    if(r.status==='finished')return;
+    // Check staleness: use lastActivity for playing games, created for waiting rooms
+    const lastActive=r.lastActivity||r.created||0;
+    if(now-lastActive>STALE_MS){db.ref('illegalAliens/rooms/'+id).update({status:'finished'});return}
+    // Check if all players eliminated in a playing game
+    if(r.status==='playing'&&r.players&&r.turnOrder){const alive=r.turnOrder.filter(pid=>r.players[pid]&&!r.players[pid].eliminated);if(alive.length<=1){db.ref('illegalAliens/rooms/'+id).update({status:'finished',winner:alive.length===1?alive[0]:null});return}}
+    // Check if waiting room has 0 players
+    if(r.status==='waiting'&&(!r.players||Object.keys(r.players).length===0)){db.ref('illegalAliens/rooms/'+id).remove();return}
+    const n=r.players?Object.keys(r.players).length:0;const d=document.createElement('div');d.className='room-item';d.innerHTML='<div><span class="rname">'+(r.name||id)+'</span> <span class="rcount">'+n+'/6'+(r.status==='playing'?' \u{1F3AE}':'')+'</span></div><button class="btn small" onclick="joinRoom(\''+id+'\')" '+(r.status!=='waiting'||n>=6?'disabled':'')+'>JOIN</button>';list.appendChild(d)});
+  if(!list.children.length)list.innerHTML='<p style="color:var(--dim);font-size:12px;text-align:center;padding:20px 0">No rooms found</p>'})}
 function createRoom(){myName=document.getElementById('player-name').value.trim();if(!myName){toast('Enter a name first!');return}localStorage.setItem('ia_name',myName);const rid=gId().substr(0,6).toUpperCase();db.ref('illegalAliens/rooms/'+rid).set({name:'Room '+rid,host:myId,status:'waiting',created:Date.now(),players:{[myId]:{name:myName,color:null,ready:false}}}).then(()=>enterRoom(rid))}
 function joinRoom(rid){myName=document.getElementById('player-name').value.trim();if(!myName){toast('Enter a name first!');return}localStorage.setItem('ia_name',myName);db.ref('illegalAliens/rooms/'+rid+'/players/'+myId).set({name:myName,color:null,ready:false}).then(()=>enterRoom(rid))}
 function enterRoom(rid){currentRoom=rid;roomRef=db.ref('illegalAliens/rooms/'+rid);document.getElementById('room-code-display').textContent='ROOM: '+rid;localStorage.setItem('ia_room',rid);showScreen('room');roomRef.on('value',snap=>{RD=snap.val();if(!RD){leaveRoom();return}if(RD.status==='playing')initGame();else renderRoom()})}
@@ -246,7 +257,7 @@ function toggleReady(){roomRef.child('players/'+myId+'/ready').set(!RD.players[m
 function startGame(){if(!RD)return;const pids=Object.keys(RD.players),np=pids.length;const order=[...pids];for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]]}
   const od=genOD(),gd=genGD();let oi=0,gi=0;const pu={};const sg=np>=5?3:2;
   order.forEach((pid,idx)=>{const h=[];h.push(od[oi++]);h.push(od[oi++]);for(let g=0;g<sg;g++)h.push(gd[gi++]);pu[pid]={...RD.players[pid],position:CP[idx],crashLanding:idx,organs:{intestine:0,heart:0,liver:0,lung:0,kidney:0,stomach:0},hand:h,lastVisitedLocation:-1,wanted:false,eliminated:false}});
-  roomRef.update({status:'playing',players:pu,turnOrder:order,currentTurn:0,phase:'ready',movementValue:0,stepsThisTurn:[],groundOrgans:{},agentPosition:6,germs:{},organDeck:od.slice(oi),guileDeck:gd.slice(gi),handLimit:np>=5?5:4,globalEffects:{},pvpState:null,log:[{text:'Game started! '+RD.players[order[0]].name+' goes first.',time:Date.now()}]})}
+  roomRef.update({status:'playing',players:pu,turnOrder:order,currentTurn:0,phase:'ready',movementValue:0,stepsThisTurn:[],groundOrgans:{},agentPosition:6,germs:{},organDeck:od.slice(oi),guileDeck:gd.slice(gi),handLimit:np>=5?5:4,globalEffects:{},pvpState:null,lastActivity:Date.now(),log:[{text:'Game started! '+RD.players[order[0]].name+' goes first.',time:Date.now()}]})}
 
 // Game
 function initGame(){showScreen('game');renderBoard();if(gL.length===0){roomRef.on('value',snap=>{RD=snap.val();if(RD&&RD.status==='playing')renderGameState();else if(RD&&RD.status==='finished'){renderGameState();showModal('<h3>\u{1F6F8} '+(RD.players[RD.winner]||{name:'???'}).name+' WINS! \u{1F6F8}</h3><p style="text-align:center;color:var(--dim);margin:12px 0">They fooled the body scanner!</p><div style="text-align:center"><button class="btn" onclick="closeModal();leaveRoom()">BACK TO LOBBY</button></div>')}});gL.push(1)}}
@@ -989,7 +1000,7 @@ function execHide(pref){
 function nextTurn(){let n=(RD.currentTurn+1)%RD.turnOrder.length,s=0;
   while(RD.players[RD.turnOrder[n]].eliminated&&s<10){n=(n+1)%RD.turnOrder.length;s++}
   addLog('<span>'+RD.players[RD.turnOrder[n]].name+"</span>'s turn begins.");
-  roomRef.update({currentTurn:n,phase:'ready',movementValue:0,stepsThisTurn:[],stepsRemaining:0})}
+  roomRef.update({currentTurn:n,phase:'ready',movementValue:0,stepsThisTurn:[],stepsRemaining:0,lastActivity:Date.now()})}
 
 // Movement - BFS to find all reachable destinations
 function getReachablePositions(){
@@ -1108,7 +1119,15 @@ function advanceFromFlee(){
 function confirmAbandon(){showModal('<h3>ABANDON GAME?</h3><p style="text-align:center;color:var(--dim);margin:12px 0">You will be removed and cannot rejoin.</p><div style="display:flex;gap:10px;justify-content:center"><button class="btn pink" onclick="closeModal();abandonGame()">ABANDON</button><button class="btn small" onclick="closeModal()">CANCEL</button></div>')}
 function abandonGame(){if(!roomRef||!RD)return;const me=RD.players[myId];if(me)addLog('<span>'+me.name+'</span> has abandoned the game.');
   if(RD.status==='playing'&&RD.turnOrder){const was=RD.turnOrder[RD.currentTurn]===myId;roomRef.child('players/'+myId+'/eliminated').set(true);
-    if(was){let n=(RD.currentTurn+1)%RD.turnOrder.length,s=0;while(s<10){const p=RD.turnOrder[n];if(p!==myId&&!RD.players[p].eliminated)break;n=(n+1)%RD.turnOrder.length;s++}roomRef.update({currentTurn:n,phase:'ready',movementValue:0,stepsThisTurn:[],stepsRemaining:0,pvpState:null,agentEncounter:null})}}
+    // Check if all players are now eliminated
+    const remaining=RD.turnOrder.filter(pid=>pid!==myId&&!RD.players[pid].eliminated);
+    if(remaining.length<=1){
+      // Game over — last player standing wins (or nobody wins)
+      if(remaining.length===1){addLog('<span>'+RD.players[remaining[0]].name+'</span> wins by default — all others abandoned!');roomRef.update({status:'finished',winner:remaining[0]})}
+      else{addLog('All players abandoned. Game over.');roomRef.update({status:'finished',winner:null})}
+    } else if(was){
+      let n=(RD.currentTurn+1)%RD.turnOrder.length,s=0;while(s<10){const p=RD.turnOrder[n];if(p!==myId&&!RD.players[p].eliminated)break;n=(n+1)%RD.turnOrder.length;s++}
+      roomRef.update({currentTurn:n,phase:'ready',movementValue:0,stepsThisTurn:[],stepsRemaining:0,pvpState:null,agentEncounter:null,lastActivity:Date.now()})}}
   else roomRef.child('players/'+myId).remove();leaveRoom()}
 
 window.addEventListener('load',()=>{const sr=localStorage.getItem('ia_room');
