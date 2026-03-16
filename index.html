@@ -23,12 +23,10 @@
 body{background:var(--bg);color:var(--text);font-family:'Share Tech Mono',monospace;font-size:14px;min-height:100vh;overflow-x:hidden}
 body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,0.012) 2px,rgba(255,255,255,0.012) 4px);pointer-events:none;z-index:9999}
 
-/* SCREENS */
 .screen{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:20px}
 .screen.active{display:flex}
 .game-screen.active{display:flex;flex-direction:row;justify-content:center;align-items:flex-start;flex-wrap:wrap;min-height:100vh;padding:10px;gap:12px}
 
-/* COMMON */
 h1.logo{font-family:'Creepster',cursive;font-size:52px;color:var(--green);text-shadow:3px 3px 0 var(--purple),-1px -1px 0 var(--pink),0 0 30px rgba(57,255,20,0.3);letter-spacing:4px;transform:skewY(-1.5deg);margin-bottom:6px;text-align:center}
 .sub{font-family:'Russo One',sans-serif;font-size:11px;color:var(--purple);letter-spacing:6px;text-transform:uppercase;text-align:center;margin-bottom:30px}
 .btn{font-family:'Russo One',sans-serif;font-size:13px;padding:10px 24px;border:2px solid var(--green);background:transparent;color:var(--green);cursor:pointer;letter-spacing:2px;transition:all .2s;border-radius:3px;text-transform:uppercase}
@@ -39,20 +37,20 @@ h1.logo{font-family:'Creepster',cursive;font-size:52px;color:var(--green);text-s
 .btn.yellow{border-color:var(--yellow);color:var(--yellow)}
 .btn.yellow:hover{background:var(--yellow);color:var(--bg)}
 .btn.small{font-size:11px;padding:6px 14px}
-input[type=text],input[type=password]{font-family:'Share Tech Mono',monospace;font-size:14px;padding:10px 14px;background:var(--bg2);border:1px solid var(--border);color:var(--text);border-radius:3px;outline:none;width:260px;text-align:center}
-input:focus{border-color:var(--purple);box-shadow:0 0 10px rgba(176,38,255,0.2)}
+input[type=text],input[type=password],select{font-family:'Share Tech Mono',monospace;font-size:14px;padding:10px 14px;background:var(--bg2);border:1px solid var(--border);color:var(--text);border-radius:3px;outline:none;width:260px;text-align:center}
+input:focus,select:focus{border-color:var(--purple);box-shadow:0 0 10px rgba(176,38,255,0.2)}
+select{cursor:pointer;appearance:none}
+select option{background:var(--bg2);color:var(--text)}
 .panel{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:20px;max-width:400px;width:100%}
 .error{color:var(--pink);font-size:12px;margin-top:8px;text-align:center}
 .gap{height:12px}
 .center{text-align:center}
 
-/* LOBBY */
 .room-list{max-height:240px;overflow-y:auto;margin:12px 0}
 .room-item{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border:1px solid var(--border);border-radius:3px;margin:6px 0;background:rgba(255,255,255,0.02)}
 .room-item .rname{color:var(--cyan);font-weight:bold}
 .room-item .rcount{color:var(--dim);font-size:12px}
 
-/* ROOM */
 .color-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
 .color-pick{width:60px;height:60px;border-radius:6px;cursor:pointer;border:3px solid transparent;transition:all .2s;display:flex;align-items:center;justify-content:center;font-size:24px}
 .color-pick:hover{transform:scale(1.1)}
@@ -62,66 +60,85 @@ input:focus{border-color:var(--purple);box-shadow:0 0 10px rgba(176,38,255,0.2)}
 .player-entry{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:13px}
 .player-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0}
 
-/* BOARD */
-.board-wrap{position:relative;width:820px;height:720px;flex-shrink:0}
+.board-wrap{position:relative;width:960px;height:840px;flex-shrink:0}
 .board-svg{position:absolute;top:0;left:0;width:100%;height:100%}
 .board-container{position:absolute;top:0;left:0;width:100%;height:100%}
 .node{position:absolute;border-radius:4px;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;font-size:10px;z-index:2}
 .node.step{width:28px;height:28px;background:var(--bg3);border:1px solid var(--border);margin-left:-14px;margin-top:-14px}
 .node.step:hover{border-color:var(--purple);background:rgba(176,38,255,0.15)}
 .node.step.valid{border-color:var(--green);background:rgba(57,255,20,0.12);box-shadow:0 0 8px rgba(57,255,20,0.3);animation:pulse 1s infinite}
-.node.step.crash{border:1px dashed var(--yellow)}
-.node.location{min-width:80px;height:36px;padding:0 10px;background:var(--bg2);border:2px solid var(--cyan);margin-left:-40px;margin-top:-18px;font-family:'Russo One',sans-serif;font-size:10px;color:var(--cyan);letter-spacing:1px;border-radius:6px;z-index:3}
+.node.step.crash{border-style:dashed;border-width:2px}
+.node.location{min-width:160px;height:50px;padding:0 16px;background:var(--bg2);border:2px solid var(--cyan);margin-left:-80px;margin-top:-25px;font-family:'Russo One',sans-serif;font-size:22px;color:var(--cyan);letter-spacing:1px;border-radius:6px;z-index:3;white-space:nowrap}
 .node.location:hover{border-color:var(--green);color:var(--green)}
 .node.location.valid{border-color:var(--green);color:var(--green);box-shadow:0 0 12px rgba(57,255,20,0.3);animation:pulse 1s infinite}
-.node.hospital{width:90px;height:44px;background:var(--bg2);border:2px solid var(--pink);margin-left:-45px;margin-top:-22px;font-family:'Creepster',cursive;font-size:16px;color:var(--pink);border-radius:8px;z-index:3}
+.node.hospital{width:120px;height:52px;background:var(--bg2);border:2px solid var(--pink);margin-left:-60px;margin-top:-26px;font-family:'Creepster',cursive;font-size:22px;color:var(--pink);border-radius:8px;z-index:3}
 .node.hospital:hover{border-color:var(--green);color:var(--green)}
 .node.hospital.valid{border-color:var(--green);color:var(--green);box-shadow:0 0 12px rgba(57,255,20,0.3);animation:pulse 1s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.6}}
 
-/* MEEPLES */
+.ground-badge{position:absolute;display:flex;gap:2px;z-index:4;pointer-events:none;flex-wrap:wrap;max-width:60px}
+.ground-pip{width:8px;height:8px;border-radius:50%;border:1px solid rgba(255,255,255,0.3)}
+.germs-badge{position:absolute;min-width:18px;height:18px;background:var(--pink);border-radius:9px;font-size:10px;color:#fff;display:flex;align-items:center;justify-content:center;padding:0 4px;z-index:4;pointer-events:none}
+
 .meeple{position:absolute;width:22px;height:30px;z-index:10;pointer-events:none;transition:left .4s ease,top .4s ease;filter:drop-shadow(0 2px 3px rgba(0,0,0,0.5))}
 
-/* SIDEBAR */
-.sidebar{width:280px;display:flex;flex-direction:column;gap:10px;flex-shrink:0}
+.sidebar{width:340px;display:flex;flex-direction:column;gap:10px;flex-shrink:0;max-height:100vh;overflow-y:auto}
 .side-panel{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:14px}
 .side-panel h3{font-family:'Creepster',cursive;font-size:20px;color:var(--pink);margin-bottom:8px}
 .side-panel h4{font-family:'Russo One',sans-serif;font-size:12px;color:var(--yellow);margin:8px 0 4px;letter-spacing:1px}
 .phase-indicator{font-family:'Creepster',cursive;font-size:24px;color:var(--green);text-align:center;margin:4px 0}
-.turn-info{text-align:center;font-size:12px;color:var(--dim);margin-bottom:4px}
+.turn-info{text-align:center;font-size:13px;color:var(--dim);margin-bottom:4px}
 .dice-display{font-size:48px;text-align:center;margin:8px 0;cursor:pointer;user-select:none;transition:transform .1s}
 .dice-display:hover{transform:scale(1.1)}
 .dice-display.rolling{animation:diceRoll .1s infinite}
 @keyframes diceRoll{0%{transform:rotate(0deg)}25%{transform:rotate(10deg)}50%{transform:rotate(-10deg)}75%{transform:rotate(5deg)}100%{transform:rotate(0deg)}}
 .mv-display{text-align:center;font-family:'Russo One',sans-serif;font-size:16px;color:var(--green);margin:4px 0}
-.steps-left{text-align:center;font-size:12px;color:var(--dim)}
 .organ-table{width:100%;border-collapse:collapse;margin:6px 0}
-.organ-table td{padding:3px 6px;font-size:12px;border-bottom:1px solid var(--border)}
+.organ-table td{padding:5px 6px;font-size:14px;border-bottom:1px solid var(--border)}
 .organ-table td:first-child{color:var(--cyan)}
 .organ-table td:last-child{text-align:right;color:var(--green)}
-.log{max-height:150px;overflow-y:auto;font-size:11px;color:var(--dim);line-height:1.6}
+.log{max-height:140px;overflow-y:auto;font-size:11px;color:var(--dim);line-height:1.6}
 .log .entry{padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.03)}
 .log .entry span{color:var(--yellow)}
 
-/* GROUND ORGANS */
-.ground-badge{position:absolute;bottom:-8px;right:-8px;min-width:16px;height:16px;background:var(--purple);border-radius:8px;font-size:9px;color:#fff;display:flex;align-items:center;justify-content:center;padding:0 3px;z-index:4;pointer-events:none}
+.hand-area{display:flex;flex-direction:column;gap:4px;margin:8px 0}
+.card{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:4px;background:rgba(255,255,255,0.03);cursor:pointer;transition:all .15s;font-size:12px;display:flex;justify-content:space-between;align-items:center}
+.card:hover{border-color:var(--purple);background:rgba(176,38,255,0.1)}
+.card.selected{border-color:var(--green);background:rgba(57,255,20,0.1);box-shadow:0 0 6px rgba(57,255,20,0.2)}
+.card.organ-card{border-left:3px solid var(--cyan)}
+.card.guile-card{border-left:3px solid var(--yellow)}
+.card .card-label{font-size:10px;color:var(--dim)}
+.card .card-value{color:var(--cyan);font-size:11px}
+.card .card-value.guile{color:var(--yellow)}
 
-/* RULES LINK */
+.harvest-panel{margin:8px 0}
+.harvest-row{display:flex;align-items:center;gap:8px;margin:6px 0;flex-wrap:wrap}
+.harvest-row label{font-size:12px;color:var(--dim);min-width:55px}
+.harvest-row select{width:auto;min-width:120px;font-size:12px;padding:6px 10px}
+.harvest-row input[type=number]{width:55px;font-size:13px;padding:6px;text-align:center;background:var(--bg2);border:1px solid var(--border);color:var(--text);border-radius:3px}
+.harvest-summary{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:4px;padding:10px;margin:8px 0;font-size:12px;line-height:1.8}
+.harvest-summary .hs-row{display:flex;justify-content:space-between}
+.harvest-summary .hs-label{color:var(--dim)}
+.harvest-summary .hs-val{color:var(--green)}
+.harvest-summary .hs-val.bad{color:var(--pink)}
+
 .rules-link{position:fixed;top:10px;right:10px;z-index:100}
 .rules-link a{color:var(--dim);font-size:11px;text-decoration:none;border:1px solid var(--border);padding:4px 10px;border-radius:3px;transition:all .2s}
 .rules-link a:hover{color:var(--green);border-color:var(--green)}
-
-/* TOAST */
 .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:var(--purple);color:#fff;font-family:'Russo One',sans-serif;font-size:13px;padding:10px 24px;border-radius:4px;z-index:1000;opacity:0;transition:opacity .3s;pointer-events:none}
 .toast.show{opacity:1}
+
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:500;align-items:center;justify-content:center}
+.modal-overlay.active{display:flex}
+.modal{background:var(--bg2);border:2px solid var(--purple);border-radius:8px;padding:24px;max-width:500px;width:90%;max-height:80vh;overflow-y:auto}
+.modal h3{font-family:'Creepster',cursive;font-size:22px;color:var(--green);margin-bottom:12px;text-align:center}
 </style>
 </head>
 <body>
-
 <div class="rules-link"><a href="rules.html" target="_blank">📋 RULES</a></div>
 <div id="toast" class="toast"></div>
+<div id="modal-overlay" class="modal-overlay" onclick="if(event.target===this)closeModal()"><div class="modal" id="modal-content"></div></div>
 
-<!-- PASSWORD SCREEN -->
 <div id="screen-password" class="screen active">
   <h1 class="logo">ILLEGAL ALIENS</h1>
   <div class="sub">Phat Phlamingo Games</div>
@@ -134,7 +151,6 @@ input:focus{border-color:var(--purple);box-shadow:0 0 10px rgba(176,38,255,0.2)}
   </div>
 </div>
 
-<!-- LOBBY SCREEN -->
 <div id="screen-lobby" class="screen">
   <h1 class="logo">ILLEGAL ALIENS</h1>
   <div class="sub">Choose your invasion</div>
@@ -146,13 +162,10 @@ input:focus{border-color:var(--purple);box-shadow:0 0 10px rgba(176,38,255,0.2)}
       <button class="btn small" onclick="createRoom()">CREATE ROOM</button>
       <button class="btn small pink" onclick="refreshRooms()">REFRESH</button>
     </div>
-    <div class="room-list" id="room-list">
-      <p style="color:var(--dim);font-size:12px;text-align:center;padding:20px 0">No rooms found</p>
-    </div>
+    <div class="room-list" id="room-list"><p style="color:var(--dim);font-size:12px;text-align:center;padding:20px 0">No rooms found</p></div>
   </div>
 </div>
 
-<!-- ROOM SCREEN -->
 <div id="screen-room" class="screen">
   <h1 class="logo" style="font-size:36px">INVASION STAGING</h1>
   <div class="sub" id="room-code-display">ROOM: ---</div>
@@ -170,7 +183,6 @@ input:focus{border-color:var(--purple);box-shadow:0 0 10px rgba(176,38,255,0.2)}
   </div>
 </div>
 
-<!-- GAME SCREEN -->
 <div id="screen-game" class="screen game-screen">
   <div class="board-wrap" id="board-wrap">
     <svg class="board-svg" id="board-svg"></svg>
@@ -181,6 +193,10 @@ input:focus{border-color:var(--purple);box-shadow:0 0 10px rgba(176,38,255,0.2)}
       <div class="turn-info" id="turn-info">Waiting...</div>
       <div class="phase-indicator" id="phase-indicator">—</div>
       <div id="phase-controls"></div>
+    </div>
+    <div class="side-panel" id="hand-panel">
+      <h3>Your Hand</h3>
+      <div class="hand-area" id="hand-area"></div>
     </div>
     <div class="side-panel">
       <h3>Your Organs</h3>
@@ -193,686 +209,408 @@ input:focus{border-color:var(--purple);box-shadow:0 0 10px rgba(176,38,255,0.2)}
   </div>
 </div>
 
-<!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <script>
-firebase.initializeApp({
-  apiKey:"AIzaSyBaVFJSGVpFMmMmiOcz3rsFgnGRbVfujCE",
-  authDomain:"prismadice-7866d.firebaseapp.com",
-  databaseURL:"https://prismadice-7866d-default-rtdb.firebaseio.com",
-  projectId:"prismadice-7866d"
-});
-const db = firebase.database();
+firebase.initializeApp({apiKey:"AIzaSyBaVFJSGVpFMmMmiOcz3rsFgnGRbVfujCE",authDomain:"prismadice-7866d.firebaseapp.com",databaseURL:"https://prismadice-7866d-default-rtdb.firebaseio.com",projectId:"prismadice-7866d"});
+const db=firebase.database();
 
-// ============ CONSTANTS ============
-const COLORS = {
-  red:    {hex:'#ff4444',bg:'#441111'},
-  yellow: {hex:'#ffdd00',bg:'#443d00'},
-  orange: {hex:'#ff8800',bg:'#442800'},
-  green:  {hex:'#44ff44',bg:'#114411'},
-  blue:   {hex:'#4488ff',bg:'#112244'},
-  purple: {hex:'#cc66ff',bg:'#331144'}
-};
-const COLOR_ORDER = ['red','yellow','orange','green','blue','purple'];
+const COLORS={red:{hex:'#ff4444'},yellow:{hex:'#ffdd00'},orange:{hex:'#ff8800'},green:{hex:'#44ff44'},blue:{hex:'#4488ff'},purple:{hex:'#cc66ff'}};
+const COLOR_ORDER=['red','yellow','orange','green','blue','purple'];
+const LOCATION_NAMES=['OLD FOLKS','GREASY SPORK','SPORTS!','BOOZ','NO-TEL','SCHÜL'];
+const ORGAN_TYPES=['intestine','heart','liver','lung','kidney','stomach'];
+const ORGAN_ICONS={intestine:'🫘',heart:'❤️',liver:'🟤',lung:'🫁',kidney:'🫐',stomach:'🟡'};
+const ORGAN_LABELS={};ORGAN_TYPES.forEach(o=>ORGAN_LABELS[o]=ORGAN_ICONS[o]+' '+o.charAt(0).toUpperCase()+o.slice(1));
+const LOC_PENALTIES={0:{intestine:-1},1:{heart:-1},2:{liver:-1},3:{lung:-1},4:{kidney:-1},5:{stomach:-1}};
+const ORGAN_COLORS={intestine:'#8B5CF6',heart:'#EF4444',liver:'#92400E',lung:'#F472B6',kidney:'#3B82F6',stomach:'#EAB308'};
+const ALIEN_GUILE=['Computer Guidance!','Tractor Beam!','Data Hacking!','Hollow Ween!','Immunity!','Teleporter!'];
+const AUTH_GUILE=['Anonymous Tip!','Quadrupeds!','Sabotage!','Neighborhood Watch!','Germs!','Men in Blarknap!'];
 
-const LOCATION_NAMES = ['OLD FOLKS','GREASY SPORK','SPORTS!','BOOZ','NO-TEL','SCHÜL'];
-const ORGAN_TYPES = ['intestine','heart','liver','lung','kidney','stomach'];
-const ORGAN_LABELS = {intestine:'🫘 Intestine',heart:'❤️ Heart',liver:'🟤 Liver',lung:'🫁 Lung',kidney:'🫘 Kidney',stomach:'🟡 Stomach'};
-
-// ============ BOARD GEOMETRY ============
-// Positions: 0-5 = locations, 6 = hospital, 7-30 = ring steps, 31-60 = spoke steps
-const CX = 410, CY = 345, RX = 290, RY = 220;
-const LOC_ANGLES = [120, 60, 0, -60, -120, 180]; // degrees, math convention
-
-function deg2rad(d){ return d * Math.PI / 180; }
-function ellipseXY(angle){ return [CX + RX*Math.cos(deg2rad(angle)), CY - RY*Math.sin(deg2rad(angle))]; }
-
+// Board geometry
+const CX=480,CY=400,RX=350,RY=270;
+const LOC_ANGLES=[120,60,0,-60,-120,180];
+function deg2rad(d){return d*Math.PI/180}
+function ellipseXY(a){return[CX+RX*Math.cos(deg2rad(a)),CY-RY*Math.sin(deg2rad(a))]}
 function buildPositions(){
-  const pos = [];
-  // 0-5: locations
-  for(let i=0;i<6;i++){
-    const [x,y] = ellipseXY(LOC_ANGLES[i]);
-    pos.push({id:i, type:'location', name:LOCATION_NAMES[i], x, y});
-  }
-  // 6: hospital
-  pos.push({id:6, type:'hospital', name:'HOSPITAL', x:CX, y:CY});
-  // 7-30: ring steps (4 between each adjacent pair)
-  for(let seg=0;seg<6;seg++){
-    const a1 = LOC_ANGLES[seg];
-    const a2 = LOC_ANGLES[(seg+1)%6];
-    let diff = a2 - a1;
-    if(diff > 180) diff -= 360;
-    if(diff < -180) diff += 360;
-    for(let s=1;s<=4;s++){
-      const angle = a1 + diff * s / 5;
-      const [x,y] = ellipseXY(angle);
-      pos.push({id:7+seg*4+(s-1), type:'step', x, y, segment:seg, segStep:s});
-    }
-  }
-  // 31-60: spoke steps (5 per location)
-  for(let loc=0;loc<6;loc++){
-    const lx=pos[loc].x, ly=pos[loc].y;
-    for(let s=1;s<=5;s++){
-      const t = s/6;
-      pos.push({id:31+loc*5+(s-1), type:'step', x:lx+(CX-lx)*t, y:ly+(CY-ly)*t, spoke:loc, spokeStep:s});
-    }
-  }
-  return pos;
+  const p=[];
+  for(let i=0;i<6;i++){const[x,y]=ellipseXY(LOC_ANGLES[i]);p.push({id:i,type:'location',name:LOCATION_NAMES[i],x,y})}
+  p.push({id:6,type:'hospital',name:'HOSPITAL',x:CX,y:CY});
+  for(let s=0;s<6;s++){const a1=LOC_ANGLES[s],a2=LOC_ANGLES[(s+1)%6];let d=a2-a1;if(d>180)d-=360;if(d<-180)d+=360;for(let i=1;i<=4;i++){const[x,y]=ellipseXY(a1+d*i/5);p.push({id:7+s*4+(i-1),type:'step',x,y})}}
+  for(let l=0;l<6;l++){const lx=p[l].x,ly=p[l].y;for(let i=1;i<=5;i++){const t=i/6;p.push({id:31+l*5+(i-1),type:'step',x:lx+(CX-lx)*t,y:ly+(CY-ly)*t})}}
+  return p;
 }
-
-function buildAdjacency(positions){
-  const adj = {};
-  for(const p of positions) adj[p.id] = new Set();
-  function link(a,b){ adj[a].add(b); adj[b].add(a); }
-  // Ring: loc0 -> s7,s8,s9,s10 -> loc1 -> s11...
-  for(let seg=0;seg<6;seg++){
-    const locA = seg;
-    const locB = (seg+1)%6;
-    const firstStep = 7 + seg*4;
-    link(locA, firstStep);
-    for(let s=0;s<3;s++) link(firstStep+s, firstStep+s+1);
-    link(firstStep+3, locB);
-  }
-  // Spokes: loc -> s31..s35 -> hospital
-  for(let loc=0;loc<6;loc++){
-    const firstStep = 31 + loc*5;
-    link(loc, firstStep);
-    for(let s=0;s<4;s++) link(firstStep+s, firstStep+s+1);
-    link(firstStep+4, 6);
-  }
-  return adj;
+function buildAdjacency(){
+  const a={};for(const p of positions)a[p.id]=new Set();
+  function link(x,y){a[x].add(y);a[y].add(x)}
+  for(let s=0;s<6;s++){const f=7+s*4;link(s,f);for(let i=0;i<3;i++)link(f+i,f+i+1);link(f+3,(s+1)%6)}
+  for(let l=0;l<6;l++){const f=31+l*5;link(l,f);for(let i=0;i<4;i++)link(f+i,f+i+1);link(f+4,6)}
+  return a;
 }
+const CRASH_POSITIONS=[7+5*4+2,7+2*4+2,7+1*4+2,7+4*4+2,7+0*4+2,7+3*4+2];
+const positions=buildPositions();
+const adjacency=buildAdjacency();
+function isLocation(id){return id>=0&&id<=5}
+function isHospital(id){return id===6}
+function isPlace(id){return id<=6}
 
-// Crash landing positions: 2 steps counter-clockwise from location
-// Counter-clockwise from locX is segment (locX-1+6)%6, step 3 (index 2) in that segment
-// Segment seg goes from loc[seg] to loc[(seg+1)%6], steps: seg*4+7 to seg*4+10
-// 2 steps left of loc L: segment ending at L is seg=(L-1+6)%6, step index 2 (3rd of 4) = 7+seg*4+2
-const CRASH_POSITIONS = [
-  7 + 5*4 + 2, // L1: 2 left of OLD FOLKS(0), segment 5 (SCHÜL->OLD FOLKS), step 3 = index 29
-  7 + 2*4 + 2, // L2: 2 left of BOOZ(3), segment 2 (SPORTS!->BOOZ), step 3 = index 17
-  7 + 1*4 + 2, // L3: 2 left of SPORTS!(2), segment 1 (GREASY SPORK->SPORTS!), step 3 = index 13
-  7 + 4*4 + 2, // L4: 2 left of SCHÜL(5), segment 4 (NO-TEL->SCHÜL), step 3 = index 25
-  7 + 0*4 + 2, // L5: 2 left of GREASY SPORK(1), segment 0 (OLD FOLKS->GREASY SPORK), step 3 = index 9
-  7 + 3*4 + 2  // L6: 2 left of NO-TEL(4), segment 3 (BOOZ->NO-TEL), step 3 = index 21
-];
+// Decks
+function shuffle(a){const r=[...a];for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]]}return r}
+function genOrganDeck(){const c=[];for(let a=0;a<6;a++)for(let b=0;b<6;b++)c.push({type:'organ',primary:ORGAN_TYPES[a],secondary:ORGAN_TYPES[b]});return shuffle([...c,...c])}
+function genGuileDeck(){const c=[];for(let a=0;a<6;a++)for(let b=0;b<6;b++)c.push({type:'guile',alien:ALIEN_GUILE[a],authority:AUTH_GUILE[b]});return shuffle([...c,...c])}
+function organLabel(c){if(!c||c.type!=='organ')return'?';const p=c.primary[0].toUpperCase()+c.primary.slice(1),s=c.secondary[0].toUpperCase()+c.secondary.slice(1);return c.primary===c.secondary?ORGAN_ICONS[c.primary]+' '+p+' ×2':ORGAN_ICONS[c.primary]+' '+p+' / '+ORGAN_ICONS[c.secondary]+' '+s}
+function guileLabel(c){return c?c.alien+' / '+c.authority:'?'}
 
-const positions = buildPositions();
-const adjacency = buildAdjacency(positions);
+// State
+let myId=localStorage.getItem('ia_pid')||genId();localStorage.setItem('ia_pid',myId);
+let myName='',currentRoom=null,roomRef=null,roomData=null,gameListeners=[];
+let selectedCards=new Set();
+function genId(){return Math.random().toString(36).substr(2,9)+Date.now().toString(36)}
 
-function isLocation(id){ return id >= 0 && id <= 5; }
-function isHospital(id){ return id === 6; }
-function isPlace(id){ return id <= 6; }
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('screen-'+id).classList.add('active')}
+function toast(m,d=2500){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),d)}
+function showModal(h){document.getElementById('modal-content').innerHTML=h;document.getElementById('modal-overlay').classList.add('active')}
+function closeModal(){document.getElementById('modal-overlay').classList.remove('active')}
 
-// ============ STATE ============
-let myId = localStorage.getItem('ia_playerId') || generateId();
-localStorage.setItem('ia_playerId', myId);
-let myName = '';
-let currentRoom = null;
-let roomRef = null;
-let roomData = null;
-let gameListeners = [];
-
-function generateId(){ return Math.random().toString(36).substr(2,9) + Date.now().toString(36); }
-
-// ============ SCREENS ============
-function showScreen(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('screen-'+id).classList.add('active');
-}
-
-function toast(msg, dur=2500){
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), dur);
-}
-
-// ============ PASSWORD ============
+// Password
 document.getElementById('pw-input').addEventListener('keydown',e=>{if(e.key==='Enter')checkPassword()});
-function checkPassword(){
-  const pw=document.getElementById('pw-input').value.trim().toLowerCase();
-  if(pw==='phatphlamingo'){showScreen('lobby');refreshRooms();}
-  else{document.getElementById('pw-error').style.display='block';}
-}
+function checkPassword(){if(document.getElementById('pw-input').value.trim().toLowerCase()==='phatphlamingo'){showScreen('lobby');refreshRooms()}else document.getElementById('pw-error').style.display='block'}
 
-// ============ LOBBY ============
+// Lobby
 function refreshRooms(){
   db.ref('illegalAliens/rooms').once('value',snap=>{
-    const list=document.getElementById('room-list');
-    const rooms=snap.val();
-    if(!rooms){list.innerHTML='<p style="color:var(--dim);font-size:12px;text-align:center;padding:20px 0">No rooms found</p>';return;}
+    const list=document.getElementById('room-list'),rooms=snap.val();
+    if(!rooms){list.innerHTML='<p style="color:var(--dim);font-size:12px;text-align:center;padding:20px 0">No rooms found</p>';return}
     list.innerHTML='';
     Object.entries(rooms).forEach(([id,r])=>{
       if(r.status==='finished')return;
-      const count=r.players?Object.keys(r.players).length:0;
-      const div=document.createElement('div');
-      div.className='room-item';
-      div.innerHTML=`<div><span class="rname">${r.name||id}</span> <span class="rcount">${count}/6</span></div>
-        <button class="btn small" onclick="joinRoom('${id}')" ${r.status!=='waiting'||count>=6?'disabled':''}>JOIN</button>`;
-      list.appendChild(div);
+      const n=r.players?Object.keys(r.players).length:0;
+      const d=document.createElement('div');d.className='room-item';
+      d.innerHTML='<div><span class="rname">'+(r.name||id)+'</span> <span class="rcount">'+n+'/6</span></div><button class="btn small" onclick="joinRoom(\''+id+'\')" '+(r.status!=='waiting'||n>=6?'disabled':'')+'>JOIN</button>';
+      list.appendChild(d);
     });
-    if(!list.children.length) list.innerHTML='<p style="color:var(--dim);font-size:12px;text-align:center;padding:20px 0">No rooms found</p>';
+    if(!list.children.length)list.innerHTML='<p style="color:var(--dim);font-size:12px;text-align:center;padding:20px 0">No rooms found</p>';
   });
 }
+function createRoom(){myName=document.getElementById('player-name').value.trim();if(!myName){toast('Enter a name first!');return}const rid=genId().substr(0,6).toUpperCase();db.ref('illegalAliens/rooms/'+rid).set({name:'Room '+rid,host:myId,status:'waiting',created:Date.now(),players:{[myId]:{name:myName,color:null,ready:false}}}).then(()=>enterRoom(rid))}
+function joinRoom(rid){myName=document.getElementById('player-name').value.trim();if(!myName){toast('Enter a name first!');return}db.ref('illegalAliens/rooms/'+rid+'/players/'+myId).set({name:myName,color:null,ready:false}).then(()=>enterRoom(rid))}
+function enterRoom(rid){currentRoom=rid;roomRef=db.ref('illegalAliens/rooms/'+rid);document.getElementById('room-code-display').textContent='ROOM: '+rid;showScreen('room');roomRef.on('value',snap=>{roomData=snap.val();if(!roomData){leaveRoom();return}if(roomData.status==='playing')initGame();else renderRoom()});roomRef.child('players/'+myId).onDisconnect().remove()}
+function leaveRoom(){if(roomRef){roomRef.child('players/'+myId).remove();roomRef.off()}currentRoom=null;roomRef=null;roomData=null;showScreen('lobby');refreshRooms()}
 
-function createRoom(){
-  myName=document.getElementById('player-name').value.trim();
-  if(!myName){toast('Enter a name first!');return;}
-  const roomId=generateId().substr(0,6).toUpperCase();
-  const roomData={
-    name:'Room '+roomId, host:myId, status:'waiting', created:Date.now(),
-    players:{[myId]:{name:myName,color:null,ready:false}}
-  };
-  db.ref('illegalAliens/rooms/'+roomId).set(roomData).then(()=>enterRoom(roomId));
-}
-
-function joinRoom(roomId){
-  myName=document.getElementById('player-name').value.trim();
-  if(!myName){toast('Enter a name first!');return;}
-  const pRef=db.ref(`illegalAliens/rooms/${roomId}/players/${myId}`);
-  pRef.set({name:myName,color:null,ready:false}).then(()=>enterRoom(roomId));
-}
-
-function enterRoom(roomId){
-  currentRoom=roomId;
-  roomRef=db.ref('illegalAliens/rooms/'+roomId);
-  document.getElementById('room-code-display').textContent='ROOM: '+roomId;
-  showScreen('room');
-  roomRef.on('value',snap=>{
-    roomData=snap.val();
-    if(!roomData){leaveRoom();return;}
-    if(roomData.status==='playing') initGame();
-    else renderRoom();
-  });
-  roomRef.child('players/'+myId).onDisconnect().remove();
-}
-
-function leaveRoom(){
-  if(roomRef){
-    roomRef.child('players/'+myId).remove();
-    roomRef.off();
-    // If host leaves and room is waiting, clean up
-  }
-  currentRoom=null;roomRef=null;roomData=null;
-  showScreen('lobby');refreshRooms();
-}
-
-// ============ ROOM UI ============
 function renderRoom(){
   if(!roomData||!roomData.players)return;
-  const players=roomData.players;
-  const me=players[myId];
-  if(!me){showScreen('lobby');refreshRooms();return;}
-  // Color grid
-  const grid=document.getElementById('color-grid');
-  grid.innerHTML='';
-  const takenColors=new Set(Object.values(players).map(p=>p.color).filter(Boolean));
-  COLOR_ORDER.forEach(c=>{
-    const div=document.createElement('div');
-    div.className='color-pick'+(me.color===c?' selected':'')+(takenColors.has(c)&&me.color!==c?' taken':'');
-    div.style.background=COLORS[c].hex;
-    div.textContent='👽';
-    if(!takenColors.has(c)||me.color===c) div.onclick=()=>selectColor(c);
-    grid.appendChild(div);
-  });
-  // Player list
-  const plist=document.getElementById('player-list');
-  plist.innerHTML='';
-  Object.entries(players).forEach(([pid,p])=>{
-    const div=document.createElement('div');
-    div.className='player-entry';
-    div.innerHTML=`<div class="player-dot" style="background:${p.color?COLORS[p.color].hex:'#333'}"></div>
-      <span${pid===myId?' style="color:var(--green)"':''}>${p.name}${pid===roomData.host?' ⭐':''}</span>
-      <span style="margin-left:auto;font-size:11px;color:${p.ready?'var(--green)':'var(--dim)'};">${p.ready?'READY':'...'}</span>`;
-    plist.appendChild(div);
-  });
-  // Buttons
+  const players=roomData.players,me=players[myId];
+  if(!me){showScreen('lobby');refreshRooms();return}
+  const grid=document.getElementById('color-grid');grid.innerHTML='';
+  const taken=new Set(Object.values(players).map(p=>p.color).filter(Boolean));
+  COLOR_ORDER.forEach(c=>{const d=document.createElement('div');d.className='color-pick'+(me.color===c?' selected':'')+(taken.has(c)&&me.color!==c?' taken':'');d.style.background=COLORS[c].hex;d.textContent='👽';if(!taken.has(c)||me.color===c)d.onclick=()=>roomRef.child('players/'+myId+'/color').set(c);grid.appendChild(d)});
+  const pl=document.getElementById('player-list');pl.innerHTML='';
+  Object.entries(players).forEach(([pid,p])=>{const d=document.createElement('div');d.className='player-entry';d.innerHTML='<div class="player-dot" style="background:'+(p.color?COLORS[p.color].hex:'#333')+'"></div><span'+(pid===myId?' style="color:var(--green)"':'')+'>'+p.name+(pid===roomData.host?' ⭐':'')+'</span><span style="margin-left:auto;font-size:11px;color:'+(p.ready?'var(--green)':'var(--dim)')+';">'+(p.ready?'READY':'...')+'</span>';pl.appendChild(d)});
   document.getElementById('ready-btn').disabled=!me.color;
   document.getElementById('ready-btn').textContent=me.ready?'UNREADY':'READY';
-  const isHost=roomData.host===myId;
-  const allReady=Object.values(players).every(p=>p.ready&&p.color);
-  const enough=Object.keys(players).length>=2;
-  const startBtn=document.getElementById('start-btn');
-  startBtn.style.display=isHost?'inline-block':'none';
-  startBtn.disabled=!(allReady&&enough);
+  const sb=document.getElementById('start-btn');sb.style.display=roomData.host===myId?'inline-block':'none';sb.disabled=!(Object.values(players).every(p=>p.ready&&p.color)&&Object.keys(players).length>=2);
 }
+function toggleReady(){roomRef.child('players/'+myId+'/ready').set(!roomData.players[myId].ready)}
 
-function selectColor(c){
-  roomRef.child('players/'+myId+'/color').set(c);
-}
-
-function toggleReady(){
-  const me=roomData.players[myId];
-  roomRef.child('players/'+myId+'/ready').set(!me.ready);
-}
-
-// ============ START GAME ============
+// Start game
 function startGame(){
   if(!roomData)return;
-  const playerIds=Object.keys(roomData.players);
-  // Shuffle for turn order
-  const turnOrder=[...playerIds];
-  for(let i=turnOrder.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[turnOrder[i],turnOrder[j]]=[turnOrder[j],turnOrder[i]];}
-  // Assign crash positions
-  const playersUpdate={};
-  turnOrder.forEach((pid,idx)=>{
-    const crashPos = CRASH_POSITIONS[idx];
-    playersUpdate[pid]={
-      ...roomData.players[pid],
-      position: crashPos,
-      crashLanding: idx,
-      organs:{intestine:0,heart:0,liver:0,lung:0,kidney:0,stomach:0},
-      lastVisitedLocation: -1,
-      wanted: false,
-      eliminated: false
-    };
+  const pids=Object.keys(roomData.players),np=pids.length;
+  const order=[...pids];for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]]}
+  const od=genOrganDeck(),gd=genGuileDeck();let oi=0,gi=0;
+  const pu={};const sg=np>=5?3:2;
+  order.forEach((pid,idx)=>{
+    const h=[];h.push(od[oi++]);h.push(od[oi++]);for(let g=0;g<sg;g++)h.push(gd[gi++]);
+    pu[pid]={...roomData.players[pid],position:CRASH_POSITIONS[idx],crashLanding:idx,organs:{intestine:0,heart:0,liver:0,lung:0,kidney:0,stomach:0},hand:h,lastVisitedLocation:-1,wanted:false,eliminated:false};
   });
-  const gameState={
-    status:'playing',
-    players:playersUpdate,
-    turnOrder,
-    currentTurn:0,
-    phase:'ready',
-    movementValue:0,
-    stepsThisTurn:[],
-    groundOrgans:{},
-    agentPosition:6,
-    germs:{},
-    log:[{text:`Game started! ${roomData.players[turnOrder[0]].name} goes first.`,time:Date.now()}]
-  };
-  roomRef.update(gameState);
+  roomRef.update({status:'playing',players:pu,turnOrder:order,currentTurn:0,phase:'ready',movementValue:0,stepsThisTurn:[],groundOrgans:{},agentPosition:6,germs:{},organDeck:od.slice(oi),guileDeck:gd.slice(gi),handLimit:np>=5?5:4,log:[{text:'Game started! '+roomData.players[order[0]].name+' goes first.',time:Date.now()}]});
 }
 
-// ============ GAME ============
-function initGame(){
-  showScreen('game');
-  renderBoard();
-  // Listen for game state changes
-  if(gameListeners.length===0){
-    roomRef.on('value',snap=>{
-      roomData=snap.val();
-      if(roomData&&roomData.status==='playing') renderGameState();
-    });
-    gameListeners.push(true);
-  }
-}
+// Game init
+function initGame(){showScreen('game');renderBoard();if(gameListeners.length===0){roomRef.on('value',snap=>{roomData=snap.val();if(roomData&&roomData.status==='playing')renderGameState();else if(roomData&&roomData.status==='finished'){renderGameState();showModal('<h3>🛸 '+(roomData.players[roomData.winner]||{name:'???'}).name+' WINS! 🛸</h3><p style="text-align:center;color:var(--dim);margin:12px 0">They fooled the body scanner!</p><div style="text-align:center"><button class="btn" onclick="closeModal();leaveRoom()">BACK TO LOBBY</button></div>')}});gameListeners.push(true)}}
 
-// ============ BOARD RENDERING ============
+// Board
 function renderBoard(){
-  const svg=document.getElementById('board-svg');
-  const container=document.getElementById('board-container');
-  svg.innerHTML='';
-  container.innerHTML='';
-  // Draw connections as SVG lines
+  const svg=document.getElementById('board-svg'),container=document.getElementById('board-container');svg.innerHTML='';container.innerHTML='';
   const ns='http://www.w3.org/2000/svg';
-  Object.entries(adjacency).forEach(([id,neighbors])=>{
-    neighbors.forEach(nid=>{
-      if(parseInt(id)<nid){
-        const p1=positions[parseInt(id)], p2=positions[nid];
-        const line=document.createElementNS(ns,'line');
-        line.setAttribute('x1',p1.x);line.setAttribute('y1',p1.y);
-        line.setAttribute('x2',p2.x);line.setAttribute('y2',p2.y);
-        line.setAttribute('stroke','#1a1a3a');line.setAttribute('stroke-width','2');
-        svg.appendChild(line);
-      }
-    });
-  });
-  // Draw nodes
+  Object.entries(adjacency).forEach(([id,nb])=>{nb.forEach(nid=>{if(parseInt(id)<nid){const p1=positions[parseInt(id)],p2=positions[nid];const l=document.createElementNS(ns,'line');l.setAttribute('x1',p1.x);l.setAttribute('y1',p1.y);l.setAttribute('x2',p2.x);l.setAttribute('y2',p2.y);l.setAttribute('stroke','#1a1a3a');l.setAttribute('stroke-width','2');svg.appendChild(l)}})});
   positions.forEach(p=>{
-    const div=document.createElement('div');
-    div.id='node-'+p.id;
-    div.dataset.nodeId=p.id;
-    if(p.type==='location'){
-      div.className='node location';
-      div.textContent=p.name;
-      div.style.left=p.x+'px';div.style.top=p.y+'px';
-    } else if(p.type==='hospital'){
-      div.className='node hospital';
-      div.textContent=p.name;
-      div.style.left=p.x+'px';div.style.top=p.y+'px';
-    } else {
-      div.className='node step';
-      const isCrash=CRASH_POSITIONS.includes(p.id);
-      if(isCrash) div.classList.add('crash');
-      div.style.left=p.x+'px';div.style.top=p.y+'px';
-    }
-    div.onclick=()=>onNodeClick(p.id);
-    container.appendChild(div);
+    const d=document.createElement('div');d.id='node-'+p.id;d.dataset.nodeId=p.id;
+    if(p.type==='location'){d.className='node location';d.textContent=p.name;d.style.left=p.x+'px';d.style.top=p.y+'px'}
+    else if(p.type==='hospital'){d.className='node hospital';d.textContent=p.name;d.style.left=p.x+'px';d.style.top=p.y+'px'}
+    else{d.className='node step';const ci=CRASH_POSITIONS.indexOf(p.id);if(ci!==-1){d.classList.add('crash');if(roomData&&roomData.players){const ap=Object.values(roomData.players).find(pl=>pl.crashLanding===ci);if(ap&&ap.color)d.style.borderColor=COLORS[ap.color].hex}}d.style.left=p.x+'px';d.style.top=p.y+'px'}
+    d.onclick=()=>onNodeClick(p.id);container.appendChild(d);
   });
 }
-
-function getMeepleHTML(color){
-  const hex=COLORS[color].hex;
-  return `<svg viewBox="0 0 24 32" xmlns="http://www.w3.org/2000/svg">
-    <ellipse cx="12" cy="29" rx="7" ry="3" fill="rgba(0,0,0,0.3)"/>
-    <path d="M12 2 C6 2 4 8 4 14 C4 18 6 22 8 25 L8 28 L16 28 L16 25 C18 22 20 18 20 14 C20 8 18 2 12 2Z" fill="${hex}" stroke="#000" stroke-width="0.5"/>
-    <circle cx="9" cy="12" r="3" fill="#fff"/>
-    <circle cx="15" cy="12" r="3" fill="#fff"/>
-    <circle cx="9" cy="12" r="1.8" fill="#111"/>
-    <circle cx="15" cy="12" r="1.8" fill="#111"/>
-    <ellipse cx="12" cy="18" rx="2" ry="1" fill="#000" opacity="0.6"/>
-  </svg>`;
-}
+function getMeepleHTML(color){const h=COLORS[color].hex;return'<svg viewBox="0 0 24 32" xmlns="http://www.w3.org/2000/svg"><ellipse cx="12" cy="29" rx="7" ry="3" fill="rgba(0,0,0,0.3)"/><path d="M12 2 C6 2 4 8 4 14 C4 18 6 22 8 25 L8 28 L16 28 L16 25 C18 22 20 18 20 14 C20 8 18 2 12 2Z" fill="'+h+'" stroke="#000" stroke-width="0.5"/><circle cx="9" cy="12" r="3" fill="#fff"/><circle cx="15" cy="12" r="3" fill="#fff"/><circle cx="9" cy="12" r="1.8" fill="#111"/><circle cx="15" cy="12" r="1.8" fill="#111"/><ellipse cx="12" cy="18" rx="2" ry="1" fill="#000" opacity="0.6"/></svg>'}
 
 function renderMeeples(){
-  document.querySelectorAll('.meeple').forEach(m=>m.remove());
-  if(!roomData||!roomData.players)return;
-  const container=document.getElementById('board-container');
-  // Count meeples per position for stacking
-  const posCount={};
-  Object.entries(roomData.players).forEach(([pid,p])=>{
-    if(p.eliminated)return;
-    if(!posCount[p.position])posCount[p.position]=[];
-    posCount[p.position].push({pid,color:p.color});
-  });
-  Object.entries(posCount).forEach(([posId,meeples])=>{
-    const node=positions[parseInt(posId)];
-    meeples.forEach((m,idx)=>{
-      const div=document.createElement('div');
-      div.className='meeple';
-      div.innerHTML=getMeepleHTML(m.color);
-      const offsetX = meeples.length > 1 ? (idx - (meeples.length-1)/2) * 16 : 0;
-      div.style.left=(node.x - 11 + offsetX)+'px';
-      div.style.top=(node.y - 28)+'px';
-      container.appendChild(div);
-    });
-  });
-  // Agent meeple
-  if(roomData.agentPosition!==undefined){
-    const agentPos=positions[roomData.agentPosition];
-    const div=document.createElement('div');
-    div.className='meeple';
-    div.innerHTML=`<svg viewBox="0 0 24 32" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="12" cy="29" rx="7" ry="3" fill="rgba(0,0,0,0.3)"/>
-      <rect x="4" y="4" width="16" height="22" rx="3" fill="#222" stroke="#555" stroke-width="0.5"/>
-      <rect x="6" y="8" width="5" height="3" rx="1" fill="#ff0000" opacity="0.8"/>
-      <rect x="13" y="8" width="5" height="3" rx="1" fill="#ff0000" opacity="0.8"/>
-      <rect x="8" y="16" width="8" height="2" rx="1" fill="#555"/>
-      <rect x="5" y="2" width="14" height="5" rx="2" fill="#333" stroke="#555" stroke-width="0.5"/>
-    </svg>`;
-    div.style.left=(agentPos.x + 12)+'px';
-    div.style.top=(agentPos.y - 28)+'px';
-    div.style.opacity='0.9';
-    container.appendChild(div);
-  }
+  document.querySelectorAll('.meeple').forEach(m=>m.remove());if(!roomData||!roomData.players)return;
+  const c=document.getElementById('board-container'),pc={};
+  Object.entries(roomData.players).forEach(([pid,p])=>{if(p.eliminated)return;if(!pc[p.position])pc[p.position]=[];pc[p.position].push({pid,color:p.color})});
+  Object.entries(pc).forEach(([posId,ms])=>{const n=positions[parseInt(posId)];ms.forEach((m,i)=>{const d=document.createElement('div');d.className='meeple';d.innerHTML=getMeepleHTML(m.color);const ox=ms.length>1?(i-(ms.length-1)/2)*16:0;d.style.left=(n.x-11+ox)+'px';d.style.top=(n.y-28)+'px';c.appendChild(d)})});
+  if(roomData.agentPosition!==undefined){const ap=positions[roomData.agentPosition];const d=document.createElement('div');d.className='meeple';d.innerHTML='<svg viewBox="0 0 24 32" xmlns="http://www.w3.org/2000/svg"><ellipse cx="12" cy="29" rx="7" ry="3" fill="rgba(0,0,0,0.3)"/><rect x="4" y="4" width="16" height="22" rx="3" fill="#222" stroke="#555" stroke-width="0.5"/><rect x="6" y="8" width="5" height="3" rx="1" fill="#ff0000" opacity="0.8"/><rect x="13" y="8" width="5" height="3" rx="1" fill="#ff0000" opacity="0.8"/><rect x="8" y="16" width="8" height="2" rx="1" fill="#555"/><rect x="5" y="2" width="14" height="5" rx="2" fill="#333" stroke="#555" stroke-width="0.5"/></svg>';d.style.left=(ap.x+12)+'px';d.style.top=(ap.y-28)+'px';d.style.opacity='0.9';c.appendChild(d)}
 }
 
-// ============ GAME STATE RENDERING ============
-function renderGameState(){
-  if(!roomData)return;
-  renderMeeples();
-  renderSidebar();
-  renderValidMoves();
+function renderGroundOrgans(){
+  document.querySelectorAll('.ground-badge').forEach(b=>b.remove());if(!roomData||!roomData.groundOrgans)return;
+  const c=document.getElementById('board-container');
+  Object.entries(roomData.groundOrgans).forEach(([lid,organs])=>{const n=positions[parseInt(lid)];if(!n)return;const tot=Object.values(organs).reduce((a,b)=>a+b,0);if(!tot)return;const bd=document.createElement('div');bd.className='ground-badge';bd.style.left=(n.x-30)+'px';bd.style.top=(n.y+22)+'px';Object.entries(organs).forEach(([o,cnt])=>{for(let i=0;i<cnt;i++){const p=document.createElement('div');p.className='ground-pip';p.style.background=ORGAN_COLORS[o];p.title=o;bd.appendChild(p)}});c.appendChild(bd)});
 }
 
-function isMyTurn(){
-  if(!roomData||!roomData.turnOrder)return false;
-  return roomData.turnOrder[roomData.currentTurn]===myId;
+function renderGerms(){
+  document.querySelectorAll('.germs-badge').forEach(b=>b.remove());if(!roomData||!roomData.germs)return;
+  const c=document.getElementById('board-container');
+  Object.entries(roomData.germs).forEach(([lid,cnt])=>{if(cnt<=0)return;const n=positions[parseInt(lid)];if(!n)return;const b=document.createElement('div');b.className='germs-badge';b.style.left=(n.x+65)+'px';b.style.top=(n.y-30)+'px';b.textContent='🦠'+cnt;c.appendChild(b)});
 }
 
-function currentPlayerId(){
-  return roomData.turnOrder[roomData.currentTurn];
-}
-
-function currentPlayerData(){
-  return roomData.players[currentPlayerId()];
-}
+// Game state rendering
+function renderGameState(){if(!roomData)return;renderMeeples();renderGroundOrgans();renderGerms();renderSidebar();renderValidMoves()}
+function isMyTurn(){return roomData&&roomData.turnOrder&&roomData.turnOrder[roomData.currentTurn]===myId}
+function cpId(){return roomData.turnOrder[roomData.currentTurn]}
+function cpData(){return roomData.players[cpId()]}
+function myData(){return roomData.players[myId]}
 
 function renderSidebar(){
-  const cp=currentPlayerData();
-  const cpName=cp.name;
-  const cpColor=COLORS[cp.color].hex;
-  const isMine=isMyTurn();
-  // Turn info
-  document.getElementById('turn-info').innerHTML=
-    `<span style="color:${cpColor}">${cpName}</span>'s turn${isMine?' (YOU)':''}`;
-  // Phase
-  const phaseNames={ready:'READY!',set:'SET!',flee:'FLEE!',harvest:'HARVEST!',hide:'HIDE!'};
-  document.getElementById('phase-indicator').textContent=phaseNames[roomData.phase]||'—';
-  // Phase controls
-  const ctrl=document.getElementById('phase-controls');
-  ctrl.innerHTML='';
-  if(isMine) renderPhaseControls(ctrl);
-  // My organs
-  const me=roomData.players[myId];
-  const tbody=document.querySelector('#my-organs tbody');
-  tbody.innerHTML='';
-  if(me){
-    const target = roomData.turnOrder.length;
-    ORGAN_TYPES.forEach(o=>{
-      const tr=document.createElement('tr');
-      const count=me.organs?me.organs[o]||0:0;
-      const boxes = Array.from({length:6},(_,i)=>
-        `<span style="display:inline-block;width:14px;height:14px;border:1px solid ${i<count?'var(--green)':'var(--border)'};background:${i<count?'rgba(57,255,20,0.25)':'transparent'};border-radius:2px;margin:0 1px;${i<target?'':'opacity:0.3'}"></span>`
-      ).join('');
-      tr.innerHTML=`<td>${ORGAN_LABELS[o]}</td><td>${boxes}</td>`;
-      tbody.appendChild(tr);
-    });
-  }
-  // Log
-  renderLog();
+  const cp=cpData(),mine=isMyTurn();
+  document.getElementById('turn-info').innerHTML='<span style="color:'+COLORS[cp.color].hex+'">'+cp.name+"</span>'s turn"+(mine?' (YOU)':'');
+  const pn={ready:'READY!',set:'SET!',flee:'FLEE!',harvest:'HARVEST!',hide:'HIDE!'};
+  document.getElementById('phase-indicator').textContent=pn[roomData.phase]||'—';
+  const ctrl=document.getElementById('phase-controls');ctrl.innerHTML='';
+  if(mine)renderPhaseControls(ctrl);else ctrl.innerHTML='<p style="text-align:center;color:var(--dim);font-size:12px;margin:8px 0">Waiting for '+cp.name+'...</p>';
+  renderHand();renderOrganTable();renderLog();
 }
 
-function renderLog(){
-  const logDiv=document.getElementById('game-log');
-  if(!roomData.log)return;
-  const entries=Array.isArray(roomData.log)?roomData.log:Object.values(roomData.log);
-  logDiv.innerHTML=entries.slice(-20).map(e=>
-    `<div class="entry">${e.text}</div>`
-  ).join('');
-  logDiv.scrollTop=logDiv.scrollHeight;
+function renderHand(){
+  const a=document.getElementById('hand-area');a.innerHTML='';const me=myData();
+  if(!me||!me.hand||!me.hand.length){a.innerHTML='<p style="color:var(--dim);font-size:12px">No cards</p>';return}
+  me.hand.forEach((card,idx)=>{
+    const d=document.createElement('div');d.className='card '+(card.type==='organ'?'organ-card':'guile-card');
+    if(selectedCards.has(idx))d.classList.add('selected');
+    const lbl=card.type==='organ'?organLabel(card):guileLabel(card);
+    d.innerHTML='<span class="card-value'+(card.type==='guile'?' guile':'')+'">'+lbl+'</span><span class="card-label">'+(card.type==='organ'?'ORGAN':'GUILE')+'</span>';
+    d.onclick=()=>{if(selectedCards.has(idx))selectedCards.delete(idx);else selectedCards.add(idx);renderHand();if(roomData.phase==='harvest'&&isMyTurn()){const c=document.getElementById('phase-controls');renderHarvestPhase(c)}};
+    a.appendChild(d);
+  });
 }
 
-function addLog(text){
-  const log=roomData.log||[];
-  const newLog=[...log,{text,time:Date.now()}].slice(-50);
-  roomRef.child('log').set(newLog);
+function renderOrganTable(){
+  const me=myData(),tb=document.querySelector('#my-organs tbody');tb.innerHTML='';if(!me)return;
+  const tgt=roomData.turnOrder.length;
+  ORGAN_TYPES.forEach(o=>{const tr=document.createElement('tr');const cnt=me.organs?me.organs[o]||0:0;
+    const boxes=Array.from({length:6},(_,i)=>'<span style="display:inline-block;width:18px;height:18px;border:1px solid '+(i<cnt?'var(--green)':'var(--border)')+';background:'+(i<cnt?'rgba(57,255,20,0.25)':'transparent')+';border-radius:2px;margin:0 2px;'+(i>=tgt?'opacity:0.3':'')+'"></span>').join('');
+    tr.innerHTML='<td>'+ORGAN_LABELS[o]+'</td><td>'+boxes+'</td>';tb.appendChild(tr)});
 }
 
-// ============ PHASE CONTROLS ============
-function renderPhaseControls(ctrl){
-  const phase=roomData.phase;
-  if(phase==='ready') renderReadyPhase(ctrl);
-  else if(phase==='set') renderSetPhase(ctrl);
-  else if(phase==='flee') renderFleePhase(ctrl);
-  else if(phase==='harvest') renderHarvestPhase(ctrl);
-  else if(phase==='hide') renderHidePhase(ctrl);
-}
+function renderLog(){const ld=document.getElementById('game-log');if(!roomData||!roomData.log)return;const e=Array.isArray(roomData.log)?roomData.log:Object.values(roomData.log);ld.innerHTML=e.slice(-30).map(x=>'<div class="entry">'+x.text+'</div>').join('');ld.scrollTop=ld.scrollHeight}
+function addLog(t){const l=roomData.log||[];roomRef.child('log').set([...l,{text:t,time:Date.now()}].slice(-50))}
 
+// Phase controls
+function renderPhaseControls(ctrl){const p=roomData.phase;if(p==='ready')renderReadyPhase(ctrl);else if(p==='set')renderSetPhase(ctrl);else if(p==='flee')renderFleePhase(ctrl);else if(p==='harvest')renderHarvestPhase(ctrl);else if(p==='hide')renderHidePhase(ctrl)}
+
+// READY
 function renderReadyPhase(ctrl){
-  ctrl.innerHTML=`
-    <p style="text-align:center;color:var(--dim);font-size:12px;margin:8px 0">Draw 2 cards (Phase 2 placeholder)</p>
-    <div style="text-align:center">
-      <button class="btn small" onclick="completeReady()">DRAW CARDS</button>
-    </div>`;
+  const od=(roomData.organDeck||[]).length,gd=(roomData.guileDeck||[]).length;
+  ctrl.innerHTML='<p style="text-align:center;color:var(--dim);font-size:12px;margin:8px 0">Draw 2 cards</p><div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap"><button class="btn small" onclick="drawReady(\'organ\',\'organ\')" '+(od>=2?'':'disabled')+'>2 ORGAN ('+od+')</button><button class="btn small yellow" onclick="drawReady(\'guile\',\'guile\')" '+(gd>=2?'':'disabled')+'>2 GUILE ('+gd+')</button><button class="btn small pink" onclick="drawReady(\'organ\',\'guile\')" '+(od>=1&&gd>=1?'':'disabled')+'>1 EACH</button></div>';
+}
+function drawReady(t1,t2){
+  const pid=cpId(),p=roomData.players[pid],h=p.hand?[...p.hand]:[];
+  const od=roomData.organDeck?[...roomData.organDeck]:[],gd=roomData.guileDeck?[...roomData.guileDeck]:[];
+  function draw(t){if(t==='organ'&&od.length)return od.shift();if(t==='guile'&&gd.length)return gd.shift();if(od.length)return od.shift();if(gd.length)return gd.shift();return null}
+  const c1=draw(t1),c2=draw(t2);if(c1)h.push(c1);if(c2)h.push(c2);
+  const u={};u['players/'+pid+'/hand']=h;u.organDeck=od.length?od:genOrganDeck();u.guileDeck=gd.length?gd:genGuileDeck();u.phase='set';
+  roomRef.update(u);addLog('<span>'+p.name+'</span> draws 2 cards.');
 }
 
-function completeReady(){
-  addLog(`<span>${currentPlayerData().name}</span> draws 2 cards.`);
-  roomRef.update({phase:'set'});
-}
-
+// SET
 function renderSetPhase(ctrl){
   const mv=roomData.movementValue;
-  if(!mv){
-    ctrl.innerHTML=`
-      <div class="dice-display" id="dice-btn" onclick="rollDice()">🎲</div>
-      <p style="text-align:center;color:var(--dim);font-size:12px">Click to roll</p>`;
-  } else {
-    ctrl.innerHTML=`
-      <div class="mv-display">Movement: ${mv}</div>
-      <div style="text-align:center;margin-top:8px">
-        <button class="btn small" onclick="beginFlee()">BEGIN FLEE!</button>
-      </div>`;
-  }
+  if(!mv)ctrl.innerHTML='<div class="dice-display" id="dice-btn" onclick="rollDice()">🎲</div><p style="text-align:center;color:var(--dim);font-size:12px">Click to roll</p>';
+  else ctrl.innerHTML='<div class="mv-display">Movement: '+mv+'</div><div style="text-align:center;margin-top:8px"><button class="btn small" onclick="beginFlee()">BEGIN FLEE!</button></div>';
 }
+function rollDice(){const b=document.getElementById('dice-btn');if(!b)return;b.classList.add('rolling');const f=['⚀','⚁','⚂','⚃','⚄','⚅'];let c=0;const iv=setInterval(()=>{b.textContent=f[Math.floor(Math.random()*6)];c++;if(c>15){clearInterval(iv);const r=Math.floor(Math.random()*6)+1;b.textContent=f[r-1];b.classList.remove('rolling');addLog('<span>'+cpData().name+'</span> rolled a '+r+'.');roomRef.update({movementValue:r})}},80)}
+function beginFlee(){selectedCards.clear();roomRef.update({phase:'flee',stepsThisTurn:[cpData().position],stepsRemaining:roomData.movementValue})}
 
-function rollDice(){
-  const btn=document.getElementById('dice-btn');
-  if(!btn)return;
-  btn.classList.add('rolling');
-  const faces=['⚀','⚁','⚂','⚃','⚄','⚅'];
-  let count=0;
-  const interval=setInterval(()=>{
-    btn.textContent=faces[Math.floor(Math.random()*6)];
-    count++;
-    if(count>15){
-      clearInterval(interval);
-      const roll=Math.floor(Math.random()*6)+1;
-      btn.textContent=faces[roll-1];
-      btn.classList.remove('rolling');
-      addLog(`<span>${currentPlayerData().name}</span> rolled a ${roll}.`);
-      roomRef.update({movementValue:roll});
-    }
-  },80);
-}
+// FLEE
+function renderFleePhase(ctrl){const r=roomData.stepsRemaining||0,m=(roomData.stepsThisTurn||[]).length-1;ctrl.innerHTML='<div class="mv-display">Steps left: '+r+'</div><p style="text-align:center;color:var(--dim);font-size:11px;margin:4px 0">Click a highlighted space to move</p>'+(m>=1?'<div style="text-align:center;margin-top:8px"><button class="btn small yellow" onclick="endFlee()">STOP MOVING</button></div>':'')}
 
-function beginFlee(){
-  const cp=currentPlayerData();
-  roomRef.update({
-    phase:'flee',
-    stepsThisTurn:[cp.position],
-    stepsRemaining:roomData.movementValue
-  });
-}
-
-function renderFleePhase(ctrl){
-  const remaining=roomData.stepsRemaining||0;
-  const moved=(roomData.stepsThisTurn||[]).length-1;
-  ctrl.innerHTML=`
-    <div class="mv-display">Steps left: ${remaining}</div>
-    <p style="text-align:center;color:var(--dim);font-size:11px;margin:4px 0">Click a highlighted space to move</p>
-    ${moved>=1?`<div style="text-align:center;margin-top:8px">
-      <button class="btn small yellow" onclick="endFlee()">STOP MOVING</button>
-    </div>`:''}`;
-}
-
+// HARVEST
 function renderHarvestPhase(ctrl){
-  const cp=currentPlayerData();
-  const pos=cp.position;
-  ctrl.innerHTML=`
-    <p style="text-align:center;color:var(--dim);font-size:12px;margin:8px 0">Harvest phase (Phase 2+)</p>
-    <div style="text-align:center">
-      <button class="btn small" onclick="completeHarvest()">SKIP HARVEST</button>
-    </div>`;
-}
-
-function completeHarvest(){
-  addLog(`<span>${currentPlayerData().name}</span> skips harvest.`);
-  roomRef.update({phase:'hide'});
-}
-
-function renderHidePhase(ctrl){
-  ctrl.innerHTML=`
-    <p style="text-align:center;color:var(--dim);font-size:12px;margin:8px 0">Draw up to hand limit (Phase 2+)</p>
-    <div style="text-align:center">
-      <button class="btn small" onclick="endTurn()">END TURN</button>
-    </div>`;
-}
-
-function endTurn(){
-  addLog(`<span>${currentPlayerData().name}</span> ends their turn.`);
-  const nextTurn=(roomData.currentTurn+1)%roomData.turnOrder.length;
-  // Skip eliminated players
-  let next=nextTurn;
-  let safety=0;
-  while(roomData.players[roomData.turnOrder[next]].eliminated && safety<10){
-    next=(next+1)%roomData.turnOrder.length;
-    safety++;
+  const cp=cpData(),pos=cp.position,atP=isPlace(pos),atH=isHospital(pos);
+  let html='';
+  if(atP){
+    if(atH){
+      // Check body scan
+      const tgt=roomData.turnOrder.length,canScan=ORGAN_TYPES.every(o=>(cp.organs[o]||0)>=tgt);
+      html+='<div class="harvest-panel"><h4 style="font-family:\'Russo One\',sans-serif;font-size:12px;color:var(--yellow);letter-spacing:1px;margin-bottom:6px">HOSPITAL</h4>';
+      if(canScan)html+='<div style="text-align:center;padding:12px;background:rgba(57,255,20,0.1);border:1px solid var(--green);border-radius:6px;margin:8px 0"><p style="color:var(--green);font-family:\'Russo One\',sans-serif;font-size:14px">BODY SCAN AVAILABLE!</p><button class="btn" onclick="bodyScan()" style="margin-top:8px">🛸 BODY SCAN!</button></div>';
+      html+='<p style="color:var(--dim);font-size:11px;margin:6px 0">Select organs to harvest (multiple types):</p>';
+      ORGAN_TYPES.forEach(o=>{const mx=6-(cp.organs[o]||0);html+='<div class="harvest-row"><label>'+ORGAN_ICONS[o]+'</label><input type="number" id="hosp-'+o+'" min="0" max="'+mx+'" value="0" onchange="updateHospPreview()" style="width:50px"><span style="color:var(--dim);font-size:11px">(max '+mx+')</span></div>'});
+      html+='<div id="harvest-preview"></div><div style="text-align:center;margin-top:8px"><button class="btn small" onclick="execHospHarvest()">ROLL TO HARVEST</button></div></div>';
+      setTimeout(()=>updateHospPreview(),50);
+    } else {
+      html+='<div class="harvest-panel"><h4 style="font-family:\'Russo One\',sans-serif;font-size:12px;color:var(--yellow);letter-spacing:1px;margin-bottom:6px">HARVEST AT '+positions[pos].name+'</h4>';
+      html+='<div class="harvest-row"><label>Organ:</label><select id="h-organ" onchange="updateHarvPreview()">';
+      ORGAN_TYPES.forEach(o=>{const mx=6-(cp.organs[o]||0);html+='<option value="'+o+'"'+(mx<=0?' disabled':'')+'>'+ORGAN_LABELS[o]+' (room: '+mx+')</option>'});
+      html+='</select></div><div class="harvest-row"><label>Qty:</label><input type="number" id="h-qty" min="1" max="6" value="1" onchange="updateHarvPreview()"></div>';
+      html+='<div id="harvest-preview"></div><div style="text-align:center;margin-top:8px"><button class="btn small" onclick="execLocHarvest()">ROLL TO HARVEST</button></div></div>';
+      setTimeout(()=>updateHarvPreview(),50);
+    }
+  } else {
+    html+='<p style="text-align:center;color:var(--dim);font-size:12px;margin:8px 0">Not at a location.</p>';
   }
-  const nextPlayer=roomData.players[roomData.turnOrder[next]];
-  addLog(`<span>${nextPlayer.name}</span>'s turn begins.`);
-  roomRef.update({
-    currentTurn:next,
-    phase:'ready',
-    movementValue:0,
-    stepsThisTurn:[],
-    stepsRemaining:0
-  });
+  // Passed aliens (PvP placeholder)
+  const passed=getPassedAliens();
+  if(passed.length)html+='<div style="border-top:1px solid var(--border);margin-top:10px;padding-top:10px"><h4 style="font-family:\'Russo One\',sans-serif;font-size:12px;color:var(--yellow);letter-spacing:1px;margin-bottom:6px">STEAL FROM SHIPMATE</h4><p style="color:var(--dim);font-size:11px">Passed: '+passed.map(pid=>roomData.players[pid].name).join(', ')+'</p><p style="color:var(--dim);font-size:11px">(PvP harvest — Phase 3)</p></div>';
+  html+='<div style="text-align:center;margin-top:10px"><button class="btn small pink" onclick="skipHarvest()">SKIP HARVEST</button></div>';
+  ctrl.innerHTML=html;
 }
 
-// ============ MOVEMENT ============
+function calcMods(locId,organ,isHosp,typesHarvested,totalQty){
+  let mod=0,details=[];
+  if(isHosp){mod-=1;details.push('Hospital: -1');mod-=typesHarvested.length;details.push('Types('+typesHarvested.length+'): -'+typesHarvested.length)}
+  else{const pen=LOC_PENALTIES[locId];if(pen&&pen[organ]){mod+=pen[organ];details.push('Location: '+pen[organ])}}
+  if(roomData.agentPosition===locId){mod-=1;details.push('Agent: -1')}
+  const germs=(roomData.germs&&roomData.germs[locId])||0;if(germs){mod-=germs;details.push('Germs: -'+germs)}
+  const go=roomData.groundOrgans&&roomData.groundOrgans[locId]?roomData.groundOrgans[locId]:{};
+  if(isHosp){typesHarvested.forEach(o=>{const gc=go[o]||0;if(gc){mod+=gc;details.push('Ground '+o+': +'+gc)}})}
+  else{const gc=go[organ]||0;if(gc){mod+=gc;details.push('Ground: +'+gc)}}
+  // Selected organ cards
+  const hand=myData().hand||[];let cb=0;
+  selectedCards.forEach(idx=>{const card=hand[idx];if(card&&card.type==='organ'){
+    if(isHosp){typesHarvested.forEach(o=>{if(card.primary===o&&card.secondary===o)cb+=2;else if(card.primary===o||card.secondary===o)cb+=1})}
+    else{if(card.primary===organ&&card.secondary===organ)cb+=2;else if(card.primary===organ||card.secondary===organ)cb+=1}
+  }});
+  if(!isHosp&&cb>totalQty)cb=totalQty;
+  if(cb){mod+=cb;details.push('Cards: +'+cb)}
+  return{mod,details};
+}
+
+function renderPreview(target,mod,details){
+  const need=target-mod;
+  return '<div class="harvest-summary"><div class="hs-row"><span class="hs-label">Target:</span><span class="hs-val">'+target+'</span></div><div class="hs-row"><span class="hs-label">Modifiers:</span><span class="hs-val'+(mod<0?' bad':'')+'">'+(mod>=0?'+':'')+mod+'</span></div>'+details.map(d=>'<div class="hs-row"><span class="hs-label" style="font-size:11px;padding-left:12px">• '+d+'</span><span></span></div>').join('')+'<div class="hs-row" style="border-top:1px solid var(--border);padding-top:4px;margin-top:4px"><span class="hs-label">Need:</span><span class="hs-val">'+need+'+ on d6</span></div><div class="hs-row"><span class="hs-label">Nat 1 = auto-fail</span></div></div>';
+}
+
+function updateHarvPreview(){
+  const pv=document.getElementById('harvest-preview');if(!pv)return;
+  const os=document.getElementById('h-organ'),qs=document.getElementById('h-qty');if(!os||!qs)return;
+  const organ=os.value;let qty=Math.max(1,parseInt(qs.value)||1);
+  const mx=6-(cpData().organs[organ]||0);if(qty>mx){qs.value=mx;qty=mx}
+  const target=Math.max(2,qty+1);
+  const{mod,details}=calcMods(cpData().position,organ,false,[organ],qty);
+  pv.innerHTML=renderPreview(target,mod,details);
+}
+
+function updateHospPreview(){
+  const pv=document.getElementById('harvest-preview');if(!pv)return;
+  let tq=0;const th=[];
+  ORGAN_TYPES.forEach(o=>{const el=document.getElementById('hosp-'+o);const q=el?parseInt(el.value)||0:0;if(q>0){tq+=q;th.push(o)}});
+  if(!tq){pv.innerHTML='<p style="color:var(--dim);font-size:11px;margin:8px 0">Select organs to see preview</p>';return}
+  const target=Math.max(2,tq+1);
+  const{mod,details}=calcMods(6,null,true,th,tq);
+  pv.innerHTML=renderPreview(target,mod,details);
+}
+
+function execLocHarvest(){
+  const os=document.getElementById('h-organ'),qs=document.getElementById('h-qty');if(!os||!qs)return;
+  const organ=os.value,qty=Math.max(1,parseInt(qs.value)||1),cp=cpData(),pid=cpId(),loc=cp.position;
+  const target=Math.max(2,qty+1);
+  const go=roomData.groundOrgans&&roomData.groundOrgans[loc]?roomData.groundOrgans[loc]:{};
+  // Calc mods
+  let mod=0;const pen=LOC_PENALTIES[loc];if(pen&&pen[organ])mod+=pen[organ];
+  if(roomData.agentPosition===loc)mod-=1;
+  mod-=(roomData.germs&&roomData.germs[loc])||0;
+  mod+=(go[organ]||0);
+  const hand=cp.hand?[...cp.hand]:[];let cb=0;const rem=[];
+  [...selectedCards].sort((a,b)=>b-a).forEach(idx=>{const c=hand[idx];if(c&&c.type==='organ'){let v=0;if(c.primary===organ&&c.secondary===organ)v=2;else if(c.primary===organ||c.secondary===organ)v=1;if(v&&cb<qty){cb+=Math.min(v,qty-cb);rem.push(idx)}}});
+  mod+=cb;
+  const roll=Math.floor(Math.random()*6)+1,result=roll+mod,ok=roll!==1&&result>=target;
+  const nh=[...hand];rem.sort((a,b)=>b-a).forEach(i=>nh.splice(i,1));
+  const u={};u['players/'+pid+'/hand']=nh;
+  if(ok){u['players/'+pid+'/organs/'+organ]=Math.min(6,(cp.organs[organ]||0)+qty);const ex=result-target;if(ex>0)u['groundOrgans/'+loc+'/'+organ]=(go[organ]||0)+ex;
+    addLog('<span>'+cp.name+'</span> rolled '+roll+(mod?'('+(mod>=0?'+':'')+mod+')='+result:'')+' vs '+target+'. ✅ Gained '+qty+' '+organ+(ex>0?', '+ex+' fell to ground':'')+'.');}
+  else{const cc=cp.organs[organ]||0;if(cc>0){u['players/'+pid+'/organs/'+organ]=cc-1;u['groundOrgans/'+loc+'/'+organ]=(go[organ]||0)+1}
+    addLog('<span>'+cp.name+'</span> rolled '+roll+(mod?'('+(mod>=0?'+':'')+mod+')='+result:'')+' vs '+target+'. ❌ Failed!'+(cc>0?' Lost 1 '+organ+'.':''));}
+  u.phase='hide';selectedCards.clear();roomRef.update(u);
+}
+
+function execHospHarvest(){
+  const cp=cpData(),pid=cpId(),loc=6;let tq=0;const tqs={},th=[];
+  ORGAN_TYPES.forEach(o=>{const el=document.getElementById('hosp-'+o);const q=el?parseInt(el.value)||0:0;if(q>0){tqs[o]=q;tq+=q;th.push(o)}});
+  if(!tq){toast('Select organs!');return}
+  const target=Math.max(2,tq+1);let mod=-1-th.length;
+  if(roomData.agentPosition===loc)mod-=1;mod-=(roomData.germs&&roomData.germs[loc])||0;
+  const go=roomData.groundOrgans&&roomData.groundOrgans[loc]?roomData.groundOrgans[loc]:{};
+  th.forEach(o=>{mod+=(go[o]||0)});
+  const hand=cp.hand?[...cp.hand]:[];let cb=0;const rem=[];
+  [...selectedCards].sort((a,b)=>b-a).forEach(idx=>{const c=hand[idx];if(c&&c.type==='organ'){th.forEach(o=>{if(c.primary===o&&c.secondary===o)cb+=2;else if(c.primary===o||c.secondary===o)cb+=1});rem.push(idx)}});
+  mod+=cb;
+  const roll=Math.floor(Math.random()*6)+1,result=roll+mod,ok=roll!==1&&result>=target;
+  const nh=[...hand];rem.sort((a,b)=>b-a).forEach(i=>nh.splice(i,1));
+  const u={};u['players/'+pid+'/hand']=nh;
+  if(ok){Object.entries(tqs).forEach(([o,q])=>{u['players/'+pid+'/organs/'+o]=Math.min(6,(cp.organs[o]||0)+q)});
+    const ex=result-target;if(ex>0){const per=Math.floor(ex/th.length);let r=ex%th.length;th.forEach(o=>{const e=per+(r>0?1:0);if(r>0)r--;if(e>0)u['groundOrgans/'+loc+'/'+o]=(go[o]||0)+e})}
+    addLog('<span>'+cp.name+'</span> rolled '+roll+'('+(mod>=0?'+':'')+mod+')='+result+' vs '+target+'. ✅ Gained '+Object.entries(tqs).map(([o,q])=>q+' '+o).join(', ')+(ex>0?', '+ex+' excess':'')+'.');}
+  else{const mo=th.sort((a,b)=>tqs[b]-tqs[a])[0];const cc=cp.organs[mo]||0;if(cc>0){u['players/'+pid+'/organs/'+mo]=cc-1;u['groundOrgans/'+loc+'/'+mo]=(go[mo]||0)+1}
+    addLog('<span>'+cp.name+'</span> rolled '+roll+'('+(mod>=0?'+':'')+mod+')='+result+' vs '+target+'. ❌ Failed!'+(cc>0?' Lost 1 '+mo+'.':''));}
+  u.phase='hide';selectedCards.clear();roomRef.update(u);
+}
+
+function bodyScan(){const cp=cpData();addLog('🛸 <span>'+cp.name+'</span> passes the BODY SCAN! THEY WIN! 🛸');roomRef.update({status:'finished',winner:cpId()})}
+function skipHarvest(){addLog('<span>'+cpData().name+'</span> skips harvest.');selectedCards.clear();roomRef.update({phase:'hide'})}
+function getPassedAliens(){if(!roomData||!roomData.stepsThisTurn)return[];const st=roomData.stepsThisTurn,pid=cpId(),r=[];Object.entries(roomData.players).forEach(([opid,op])=>{if(opid===pid||op.eliminated)return;if(st.slice(1).includes(op.position))r.push(opid)});return r}
+
+// HIDE
+function renderHidePhase(ctrl){
+  const me=myData(),hand=me.hand||[],lim=roomData.handLimit||4;
+  const afterD=hand.length-selectedCards.size,willD=Math.max(0,lim-afterD);
+  let h='<p style="text-align:center;color:var(--dim);font-size:12px;margin:8px 0">Discard & draw up to '+lim+'</p>';
+  if(selectedCards.size)h+='<p style="text-align:center;color:var(--pink);font-size:12px">'+selectedCards.size+' to discard</p>';
+  if(willD||selectedCards.size)h+='<p style="text-align:center;color:var(--dim);font-size:11px">After: '+afterD+' → draw '+willD+'</p>';
+  const od=(roomData.organDeck||[]).length,gd=(roomData.guileDeck||[]).length;
+  if(willD>0)h+='<div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:8px 0"><button class="btn small" onclick="execHide(\'organ\')">ORGAN ('+od+')</button><button class="btn small yellow" onclick="execHide(\'guile\')">GUILE ('+gd+')</button><button class="btn small pink" onclick="execHide(\'mix\')">MIX</button></div>';
+  else h+='<div style="text-align:center;margin:8px 0"><button class="btn small" onclick="execHide(\'none\')">END TURN</button></div>';
+  ctrl.innerHTML=h;
+}
+
+function execHide(pref){
+  const pid=cpId(),me=roomData.players[pid],hand=me.hand?[...me.hand]:[],lim=roomData.handLimit||4;
+  [...selectedCards].sort((a,b)=>b-a).forEach(i=>hand.splice(i,1));const dc=selectedCards.size;
+  const need=Math.max(0,lim-hand.length);
+  const od=roomData.organDeck?[...roomData.organDeck]:[],gd=roomData.guileDeck?[...roomData.guileDeck]:[];
+  let dO=0,dG=0;
+  for(let i=0;i<need;i++){let c=null;
+    if(pref==='organ'&&od.length)c=od.shift();else if(pref==='guile'&&gd.length)c=gd.shift();
+    else if(pref==='mix'){if(i%2===0&&od.length)c=od.shift();else if(gd.length)c=gd.shift();else if(od.length)c=od.shift()}
+    if(!c&&od.length)c=od.shift();if(!c&&gd.length)c=gd.shift();
+    if(!c){od.push(...genOrganDeck());gd.push(...genGuileDeck());c=od.shift()}
+    if(c){hand.push(c);c.type==='organ'?dO++:dG++}
+  }
+  const u={};u['players/'+pid+'/hand']=hand;u.organDeck=od;u.guileDeck=gd;
+  selectedCards.clear();
+  const tot=dO+dG;
+  roomRef.update(u).then(()=>{addLog('<span>'+me.name+'</span>'+(dc?' discards '+dc:'')+(tot?', draws '+tot:'')+(dc||tot?'.':'')+' Turn ends.');nextTurn()});
+}
+
+function nextTurn(){
+  let n=(roomData.currentTurn+1)%roomData.turnOrder.length,s=0;
+  while(roomData.players[roomData.turnOrder[n]].eliminated&&s<10){n=(n+1)%roomData.turnOrder.length;s++}
+  addLog('<span>'+roomData.players[roomData.turnOrder[n]].name+"</span>'s turn begins.");
+  roomRef.update({currentTurn:n,phase:'ready',movementValue:0,stepsThisTurn:[],stepsRemaining:0});
+}
+
+// Movement
 function getValidMoves(){
   if(!roomData||roomData.phase!=='flee'||!isMyTurn())return[];
-  const remaining=roomData.stepsRemaining||0;
-  if(remaining<=0)return[];
-  const cp=currentPlayerData();
-  const currentPos=cp.position;
-  const visited=new Set(roomData.stepsThisTurn||[]);
-  const lastVisited=cp.lastVisitedLocation;
-  const valid=[];
-  adjacency[currentPos].forEach(nid=>{
-    if(visited.has(nid))return;
-    // No-revisit location rule
-    if(isPlace(nid) && nid===lastVisited)return;
-    valid.push(nid);
-  });
-  return valid;
+  const r=roomData.stepsRemaining||0;if(r<=0)return[];
+  const cp=cpData(),vis=new Set(roomData.stepsThisTurn||[]),lv=cp.lastVisitedLocation,v=[];
+  adjacency[cp.position].forEach(nid=>{if(vis.has(nid))return;if(isPlace(nid)&&nid===lv)return;v.push(nid)});return v;
 }
+function renderValidMoves(){document.querySelectorAll('.node.valid').forEach(n=>n.classList.remove('valid'));if(!isMyTurn()||roomData.phase!=='flee')return;getValidMoves().forEach(id=>{const n=document.getElementById('node-'+id);if(n)n.classList.add('valid')})}
+function onNodeClick(nid){if(!isMyTurn()||roomData.phase!=='flee'||!getValidMoves().includes(nid))return;const pid=cpId(),st=[...(roomData.stepsThisTurn||[]),nid],r=(roomData.stepsRemaining||0)-1;const u={stepsThisTurn:st,stepsRemaining:r};u['players/'+pid+'/position']=nid;if(isPlace(nid))u['players/'+pid+'/lastVisitedLocation']=nid;roomRef.update(u).then(()=>{if(r<=0)setTimeout(advanceToHarvest,300)})}
+function endFlee(){advanceToHarvest()}
+function advanceToHarvest(){const cp=cpData(),nm=isPlace(cp.position)?positions[cp.position].name:'a step';addLog('<span>'+cp.name+'</span> stops at '+nm+'.');selectedCards.clear();roomRef.update({phase:'harvest',stepsRemaining:0})}
 
-function renderValidMoves(){
-  // Clear all valid highlights
-  document.querySelectorAll('.node.valid').forEach(n=>n.classList.remove('valid'));
-  if(!isMyTurn()||roomData.phase!=='flee')return;
-  const valid=getValidMoves();
-  valid.forEach(id=>{
-    const node=document.getElementById('node-'+id);
-    if(node) node.classList.add('valid');
-  });
-}
-
-function onNodeClick(nodeId){
-  if(!isMyTurn()||roomData.phase!=='flee')return;
-  const valid=getValidMoves();
-  if(!valid.includes(nodeId))return;
-  const cp=currentPlayerData();
-  const pid=currentPlayerId();
-  const stepsThisTurn=[...(roomData.stepsThisTurn||[]),nodeId];
-  const remaining=(roomData.stepsRemaining||0)-1;
-  const updates={};
-  updates['stepsThisTurn']=stepsThisTurn;
-  updates['stepsRemaining']=remaining;
-  updates[`players/${pid}/position`]=nodeId;
-  // Track location visits
-  if(isPlace(nodeId)){
-    updates[`players/${pid}/lastVisitedLocation`]=nodeId;
-  }
-  roomRef.update(updates).then(()=>{
-    // If no more moves or no valid moves from new position, auto-advance
-    if(remaining<=0){
-      setTimeout(()=>autoAdvanceFromFlee(),300);
-    }
-  });
-}
-
-function autoAdvanceFromFlee(){
-  // Check if there are valid moves remaining
-  const remaining=roomData.stepsRemaining||0;
-  if(remaining<=0){
-    advanceToHarvest();
-    return;
-  }
-  const valid=getValidMoves();
-  if(valid.length===0){
-    advanceToHarvest();
-  }
-}
-
-function endFlee(){
-  advanceToHarvest();
-}
-
-function advanceToHarvest(){
-  const cp=currentPlayerData();
-  const locName=isPlace(cp.position)?positions[cp.position].name:'a step';
-  addLog(`<span>${cp.name}</span> stops at ${locName}.`);
-  roomRef.update({phase:'harvest',stepsRemaining:0});
-}
-
-// ============ INIT ============
-window.addEventListener('load',()=>{
-  document.getElementById('pw-input').focus();
-});
+window.addEventListener('load',()=>document.getElementById('pw-input').focus());
 </script>
 </body>
 </html>
