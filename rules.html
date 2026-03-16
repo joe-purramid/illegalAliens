@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ILLEGAL ALIENS — Rules</title>
+<link href="https://fonts.googleapis.com/css2?family=Creepster&family=Russo+One&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a12;
+    --bg-section: #111122;
+    --green: #39ff14;
+    --pink: #ff2a6d;
+    --purple: #b026ff;
+    --yellow: #ffe600;
+    --cyan: #00fff7;
+    --text: #d0d0e0;
+    --text-dim: #8888aa;
+    --border: #2a2a4a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.015) 2px, rgba(255,255,255,0.015) 4px);
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  .wrapper {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 20px 24px 80px;
+  }
+
+  header {
+    text-align: center;
+    padding: 50px 0 30px;
+    position: relative;
+  }
+
+  header::after {
+    content: '';
+    display: block;
+    width: 80%;
+    height: 2px;
+    margin: 30px auto 0;
+    background: linear-gradient(90deg, transparent, var(--green), var(--purple), var(--pink), transparent);
+  }
+
+  h1 {
+    font-family: 'Creepster', cursive;
+    font-size: clamp(48px, 10vw, 80px);
+    color: var(--green);
+    text-shadow:
+      3px 3px 0 var(--purple),
+      -1px -1px 0 var(--pink),
+      0 0 30px rgba(57, 255, 20, 0.3);
+    letter-spacing: 4px;
+    transform: skewY(-1.5deg);
+    line-height: 1;
+  }
+
+  .subtitle {
+    font-family: 'Russo One', sans-serif;
+    font-size: 14px;
+    color: var(--purple);
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    margin-top: 12px;
+  }
+
+  .byline {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 8px;
+    letter-spacing: 2px;
+  }
+
+  h2 {
+    font-family: 'Creepster', cursive;
+    font-size: 32px;
+    color: var(--pink);
+    margin: 40px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--border);
+    text-shadow: 2px 2px 0 rgba(176, 38, 255, 0.3);
+    letter-spacing: 2px;
+  }
+
+  h3 {
+    font-family: 'Russo One', sans-serif;
+    font-size: 17px;
+    color: var(--yellow);
+    margin: 24px 0 10px;
+    letter-spacing: 1px;
+  }
+
+  h4 {
+    font-family: 'Russo One', sans-serif;
+    font-size: 14px;
+    color: var(--cyan);
+    margin: 18px 0 8px;
+    letter-spacing: 1px;
+  }
+
+  section {
+    background: var(--bg-section);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--purple);
+    border-radius: 4px;
+    padding: 20px 24px;
+    margin: 16px 0;
+  }
+
+  p {
+    margin: 8px 0;
+  }
+
+  .phase-tag {
+    display: inline-block;
+    font-family: 'Creepster', cursive;
+    font-size: 22px;
+    color: var(--green);
+    text-shadow: 1px 1px 0 rgba(176, 38, 255, 0.4);
+    margin-right: 8px;
+  }
+
+  .phase-num {
+    display: inline-block;
+    background: var(--purple);
+    color: #fff;
+    font-family: 'Russo One', sans-serif;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  .highlight {
+    color: var(--green);
+    font-weight: bold;
+  }
+
+  .warn {
+    color: var(--pink);
+    font-weight: bold;
+  }
+
+  .location-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 20px;
+    margin: 12px 0;
+  }
+
+  .location-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 10px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 3px;
+    border-left: 2px solid var(--cyan);
+  }
+
+  .location-name { color: var(--cyan); }
+  .location-penalty { color: var(--pink); }
+
+  .card-block {
+    margin: 8px 0;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 3px;
+    border-left: 2px solid var(--yellow);
+  }
+
+  .card-name {
+    color: var(--yellow);
+    font-weight: bold;
+  }
+
+  .vs {
+    display: inline-block;
+    background: var(--pink);
+    color: #fff;
+    font-family: 'Creepster', cursive;
+    font-size: 12px;
+    padding: 1px 8px;
+    border-radius: 3px;
+    margin: 0 4px;
+  }
+
+  .example {
+    background: rgba(57, 255, 20, 0.05);
+    border: 1px dashed rgba(57, 255, 20, 0.2);
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin: 12px 0;
+    font-size: 14px;
+  }
+
+  .example::before {
+    content: '▸ EXAMPLE';
+    display: block;
+    font-family: 'Russo One', sans-serif;
+    font-size: 11px;
+    color: var(--green);
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+
+  .toc {
+    columns: 2;
+    column-gap: 24px;
+    list-style: none;
+    margin: 12px 0;
+  }
+
+  .toc li {
+    padding: 4px 0;
+    break-inside: avoid;
+  }
+
+  .toc a {
+    color: var(--cyan);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--border);
+    transition: color 0.2s;
+  }
+
+  .toc a:hover {
+    color: var(--green);
+  }
+
+  .win-box {
+    text-align: center;
+    padding: 24px;
+    background: linear-gradient(135deg, rgba(57,255,20,0.08), rgba(176,38,255,0.08));
+    border: 2px solid var(--green);
+    border-radius: 6px;
+    margin: 20px 0;
+  }
+
+  .win-box h3 {
+    font-family: 'Creepster', cursive;
+    font-size: 28px;
+    color: var(--green);
+    margin-bottom: 12px;
+  }
+
+  @media (max-width: 600px) {
+    .wrapper { padding: 12px 14px 60px; }
+    section { padding: 14px 16px; }
+    .location-grid { grid-template-columns: 1fr; }
+    .toc { columns: 1; }
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+<header>
+  <h1>ILLEGAL ALIENS</h1>
+  <div class="subtitle">Rules &amp; How to Play</div>
+  <div class="byline">A Game by Phat Phlamingo Games · 2–6 Players</div>
+</header>
+
+<!-- TABLE OF CONTENTS -->
+<section>
+  <h3>Table of Contents</h3>
+  <ul class="toc">
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#setup">Game Setup</a></li>
+    <li><a href="#board">The Board</a></li>
+    <li><a href="#turns">Turn Structure</a></li>
+    <li><a href="#harvesting">Harvesting Organs</a></li>
+    <li><a href="#hospital">Hospital Rules</a></li>
+    <li><a href="#pvp">Harvesting from Shipmates</a></li>
+    <li><a href="#organ-cards">Organ Cards</a></li>
+    <li><a href="#guile-cards">Guile Cards</a></li>
+    <li><a href="#agent">The Agent</a></li>
+    <li><a href="#winning">Winning the Game</a></li>
+  </ul>
+</section>
+
+<!-- OVERVIEW -->
+<h2 id="overview">Overview</h2>
+<section>
+  <p>2–6 aliens have crash-landed on Earth. To escape, each alien must harvest enough human organs to fool a government body scanner. Collect organs from various locations, steal from your fellow aliens, dodge the government Agent, and be the first to pass the <span class="highlight">BODY SCAN!</span> at the Hospital to win.</p>
+</section>
+
+<!-- SETUP -->
+<h2 id="setup">Game Setup</h2>
+<section>
+  <p>Each player chooses a color (<span style="color:#ff4444">red</span>, <span style="color:#ffdd00">yellow</span>, <span style="color:#ff8800">orange</span>, <span style="color:#44ff44">green</span>, <span style="color:#4488ff">blue</span>, or <span style="color:#cc66ff">purple</span>) and receives:</p>
+  <p>· A colored Alien meeple and matching d6</p>
+  <p>· An organ-tracking chart</p>
+  <p>· 2 Organ cards and 2 Guile cards (3 Guile cards in 5–6 player games)</p>
+  <p>Randomly select a starting player. Each alien is placed at their designated crash landing space on the board. The starting player begins their turn and play proceeds clockwise.</p>
+</section>
+
+<!-- BOARD -->
+<h2 id="board">The Board</h2>
+<section>
+  <h3>Locations</h3>
+  <p>Six locations form an oval around the outside of the board with <span class="highlight">4 steps</span> between each. Clockwise from top-left:</p>
+  <p>OLD FOLKS → GREASY SPORK → SPORTS! → BOOZ → NO-TEL → SCHÜL</p>
+
+  <h3>The Hospital</h3>
+  <p>The HOSPITAL sits at the center of the board, connected to each outer location by <span class="highlight">5 steps</span>. Players can travel around the oval or cut through the center.</p>
+
+  <h3>Crash Landing Spaces (Starting Positions)</h3>
+  <p>Each starting space is 2 steps to the left of a location:</p>
+  <p>L1: left of OLD FOLKS · L2: left of BOOZ · L3: left of SPORTS! · L4: left of SCHÜL · L5: left of GREASY SPORK · L6: left of NO-TEL</p>
+</section>
+
+<!-- TURNS -->
+<h2 id="turns">Turn Structure</h2>
+<section>
+  <p>Each player takes a complete turn before the next player goes. A turn has five phases:</p>
+
+  <h3><span class="phase-num">1</span> <span class="phase-tag">READY!</span></h3>
+  <p>Draw <span class="highlight">2 cards</span> from either the Organ deck, the Guile deck, or one from each. Player's choice.</p>
+
+  <h3><span class="phase-num">2</span> <span class="phase-tag">SET!</span></h3>
+  <p>Roll your d6 and apply any Guile card modifiers. The result is your <span class="highlight">Movement Value</span> for this turn.</p>
+
+  <h3><span class="phase-num">3</span> <span class="phase-tag">FLEE!</span></h3>
+  <p>Move your alien meeple up to your Movement Value in steps. You can go left, right, or toward/from the Hospital.</p>
+  <p>· You <span class="warn">must</span> move at least 1 step.</p>
+  <p>· Locations count as 1 step of movement.</p>
+  <p>· You <span class="warn">cannot</span> cross the same step twice in the same turn.</p>
+  <p>· You <span class="warn">cannot</span> revisit a location without having visited a different location first. This rule persists across turns.</p>
+
+  <h3><span class="phase-num">4</span> <span class="phase-tag">HARVEST!</span></h3>
+  <p>You may take one or both of the following actions:</p>
+  <p>· <span class="highlight">Harvest from a location</span> if you ended your movement on one.</p>
+  <p>· <span class="highlight">Harvest from a shipmate</span> if you passed over another alien during movement (once per turn).</p>
+  <p>See the detailed sections below for harvesting rules.</p>
+
+  <h3><span class="phase-num">5</span> <span class="phase-tag">HIDE!</span></h3>
+  <p>Your turn is over. You may discard any unwanted cards from your hand, then draw back up to <span class="highlight">4 cards</span> (or 5 in a 5–6 player game) from either or both decks. If one deck is exhausted, draw from the other. If both are empty simultaneously, reshuffle both decks. If you already have 4 (or 5) or more cards, you do not draw. There is no hand limit. Play passes to the next player.</p>
+</section>
+
+<!-- HARVESTING -->
+<h2 id="harvesting">Harvesting Organs</h2>
+<section>
+  <h3>The Six Organ Types</h3>
+  <p>Intestine · Heart · Liver · Lung · Kidney · Stomach</p>
+  <p>Each organ can be tracked up to a <span class="highlight">maximum of 6</span> on your organ chart. You may never declare more organs than you have room to store.</p>
+
+  <h3>How to Harvest at a Location</h3>
+  <p>1. Declare which organ you want and <span class="highlight">how many</span> you're attempting to collect.</p>
+  <p>2. Your <span class="highlight">target number</span> = quantity declared + 1 (minimum target is always 2).</p>
+  <p>3. Roll your d6 and add up all modifiers:</p>
+  <p style="padding-left: 16px;">· <span class="highlight">+1</span> per matching Organ card played (max cards played = number declared)</p>
+  <p style="padding-left: 16px;">· <span class="highlight">+1</span> per matching organ on the ground at that location</p>
+  <p style="padding-left: 16px;">· <span class="highlight">+/−</span> any Guile card effects</p>
+  <p style="padding-left: 16px;">· <span class="warn">−</span> location penalties (see below)</p>
+  <p>4. A <span class="warn">natural 1 always fails</span>, regardless of modifiers.</p>
+
+  <h3>Outcome</h3>
+  <p>· <span class="warn">Result &lt; target</span>: Failure. You lose 1 of that organ type (if you have any). The lost organ falls to the ground at that location.</p>
+  <p>· <span class="highlight">Result ≥ target</span>: Success! You gain the number of organs you declared. Any excess (result − target) falls to the ground at that location.</p>
+
+  <div class="example">
+    You're at OLD FOLKS and declare 4 livers (no penalty for livers here). Target = 5. You play 3 Liver organ cards. You roll a 4. Result = 4 + 3 = 7. Success! You keep 4 livers, and 7 − 5 = 2 excess livers fall to the ground.
+  </div>
+
+  <h3>Location Penalties</h3>
+  <div class="location-grid">
+    <div class="location-item"><span class="location-name">OLD FOLKS</span><span class="location-penalty">−1 Intestine</span></div>
+    <div class="location-item"><span class="location-name">GREASY SPORK</span><span class="location-penalty">−1 Heart</span></div>
+    <div class="location-item"><span class="location-name">SPORTS!</span><span class="location-penalty">−1 Liver</span></div>
+    <div class="location-item"><span class="location-name">BOOZ</span><span class="location-penalty">−1 Lung</span></div>
+    <div class="location-item"><span class="location-name">NO-TEL</span><span class="location-penalty">−1 Kidney</span></div>
+    <div class="location-item"><span class="location-name">SCHÜL</span><span class="location-penalty">−1 Stomach</span></div>
+  </div>
+</section>
+
+<!-- HOSPITAL -->
+<h2 id="hospital">Hospital Rules</h2>
+<section>
+  <p>The Hospital has special rules for harvesting:</p>
+  <p>· <span class="warn">Base −1 penalty</span> to all organ rolls.</p>
+  <p>· You may harvest <span class="highlight">multiple organ types</span> in a single action.</p>
+  <p>· Target number = <span class="highlight">total organs declared</span> (across all types) + 1.</p>
+  <p>· An additional <span class="warn">−1 per organ type</span> being harvested (on top of the base −1).</p>
+  <p>· You may play matching Organ cards for each type, but no more cards of a type than the quantity declared for that type.</p>
+
+  <div class="example">
+    You declare 2 hearts and 2 livers at the Hospital. Target = 4 + 1 = 5. Modifiers: −1 (hospital) −1 (heart type) −1 (liver type) = −3 total. You play 2 Heart cards and 2 Liver cards (+4). You roll a 4. Result = 4 + 4 − 3 = 5. Success! You keep 2 hearts and 2 livers with no excess.
+  </div>
+</section>
+
+<!-- PVP HARVESTING -->
+<h2 id="pvp">Harvesting from Shipmates</h2>
+<section>
+  <p>If you passed over another alien during FLEE!, you may attempt to steal one organ from them. This can only be attempted <span class="warn">once per turn</span>, regardless of how many aliens you passed. The target must have the organ you're trying to steal. All organ charts are public information.</p>
+
+  <h3>How It Works</h3>
+  <p>1. Declare the organ type you want to steal.</p>
+  <p>2. Play any Guile cards you wish. The target player may then respond with their own Guile cards. Players alternate playing cards until both pass or run out.</p>
+  <p>3. Both players make opposed d6 rolls, adding Guile modifiers. (Natural 1 is <span class="highlight">not</span> an auto-fail on opposed rolls.)</p>
+  <p>4. <span class="highlight">Active player rolls strictly higher</span>: Steal 1 organ of the declared type.</p>
+  <p>5. <span class="warn">Target ties or rolls higher</span>: No organ is stolen. The target immediately gets a free SET! roll and may move in any valid direction. The target <span class="warn">cannot</span> harvest from any aliens passed during this free move.</p>
+</section>
+
+<!-- ORGAN CARDS -->
+<h2 id="organ-cards">Organ Cards</h2>
+<section>
+  <p>The Organ deck contains <span class="highlight">72 cards</span>. Each card has two organs printed on it. Every possible pairing appears exactly twice.</p>
+
+  <h3>Mixed Pairs (e.g., Liver/Intestine)</h3>
+  <p>When played, choose which of the two organ types to use. It counts as +1 for that type.</p>
+
+  <h3>Doubles (e.g., Liver/Liver)</h3>
+  <p>Counts as <span class="highlight">+2</span> of that organ type when played.</p>
+</section>
+
+<!-- GUILE CARDS -->
+<h2 id="guile-cards">Guile Cards</h2>
+<section>
+  <p>The Guile deck contains <span class="highlight">72 cards</span>. Each card has two effects: an <span class="highlight">Alien Guile</span> effect and an <span class="warn">Authority Guile</span> effect. Choose which to use when played. Every Alien/Authority pairing appears exactly twice.</p>
+  <p>Guile cards may be played at any point during your turn before the HIDE! phase. <span class="highlight">Alien Guile effects can only be played on your own turn.</span> Some Authority Guile effects can be played in response to other players' actions.</p>
+
+  <h3>Alien Guile Effects</h3>
+
+  <div class="card-block">
+    <span class="card-name">Computer Guidance!</span> — +1 to your Harvest roll.
+  </div>
+  <div class="card-block">
+    <span class="card-name">Tractor Beam!</span> — +2 to your Harvest roll.
+  </div>
+  <div class="card-block">
+    <span class="card-name">Data Hacking!</span> — When landing on or passing over another alien during FLEE!, steal 2 cards at random from them. If passing over 2 aliens, you may steal 1 from each instead.
+  </div>
+  <div class="card-block">
+    <span class="card-name">Hollow Ween!</span> — Double all players' SET! rolls until your next READY! phase. Cancels an active Neighborhood Watch.
+  </div>
+  <div class="card-block">
+    <span class="card-name">Immunity!</span> — Remove all Germs! cards from one location. Can be played at any time during your turn.
+  </div>
+  <div class="card-block">
+    <span class="card-name">Teleporter!</span> — Before your SET! roll, move your alien to any crash landing space on the board.
+  </div>
+
+  <h3>Authority Guile Effects</h3>
+
+  <div class="card-block">
+    <span class="card-name">Anonymous Tip!</span> — −1 to an opponent's Harvest roll during a shipmate harvest against you.
+  </div>
+  <div class="card-block">
+    <span class="card-name">Quadrupeds!</span> — −2 to an opponent's Harvest roll during a shipmate harvest against you.
+  </div>
+  <div class="card-block">
+    <span class="card-name">Sabotage!</span> — When another alien lands on or passes over you during FLEE!, they discard 2 cards at random. Also cancels a Data Hacking! attempt (see below).
+  </div>
+  <div class="card-block">
+    <span class="card-name">Neighborhood Watch!</span> — Halve all players' SET! rolls (round down) until your next READY! phase. Cancels an active Hollow Ween.
+  </div>
+  <div class="card-block">
+    <span class="card-name">Germs!</span> — Place this card beside a location. −1 to all Harvest rolls there. Stackable. Cannot be placed at the Hospital.
+  </div>
+  <div class="card-block">
+    <span class="card-name">Men in Blarknap!</span> — Move the Agent one location in any direction (see Agent rules).
+  </div>
+
+  <h3>Data Hacking! <span class="vs">VS</span> Sabotage!</h3>
+  <p>These cards cancel each other one-for-one. If Data Hacking is played and the target responds with Sabotage, both are cancelled — no cards are stolen and no cards are discarded. Players may continue to play these cards; any unmatched card takes full effect. If Data Hacking targets two aliens, a single Sabotage cancels the entire attempt.</p>
+</section>
+
+<!-- AGENT -->
+<h2 id="agent">The Agent</h2>
+<section>
+  <p>The Agent is a government operative hunting the aliens. The Agent meeple starts at the Hospital and uses a <span class="highlight">black die</span>.</p>
+
+  <h3>Moving the Agent</h3>
+  <p>When a <span class="card-name">Men in Blarknap!</span> card is played, the player moves the Agent to an adjacent location (one step along the ring or to/from the Hospital). On the very first move of the game, the Agent may be sent to any of the 6 outer locations. The Agent stays put until the next Men in Blarknap card is played.</p>
+
+  <h3>Agent Encounters</h3>
+  <p>When the Agent moves, any aliens it passes over or that are at the Agent's destination must make <span class="highlight">opposed d6 rolls</span> against the Agent. No modifiers apply to these rolls. Instead of rolling, a player may play a <span class="card-name">Teleporter!</span> card to escape the encounter.</p>
+  <p>· <span class="highlight">Player rolls higher</span>: The player escapes and gets a free SET! roll to move.</p>
+  <p>· <span class="warn">Player ties or rolls lower</span>: The player is sent to the Hospital and loses 1 organ of the type they have the fewest of (player's choice if tied). The lost organ is <span class="warn">removed from the game</span>, not dropped on the ground.</p>
+
+  <h3>Wanted!</h3>
+  <p>If an alien is sent to the Hospital by the Agent and does <span class="warn">not have at least one of every organ type</span>, they receive a <span class="warn">Wanted! token</span> instead of losing an organ. If the same alien is sent to the Hospital by the Agent a second time and still does not have one of every organ type, that alien is <span class="warn">eliminated from the game</span>.</p>
+
+  <h3>Passive Effect</h3>
+  <p>Any location where the Agent is present has an additional <span class="warn">−1 penalty</span> to all organ harvest rolls. Simply passing the Agent during normal movement does <span class="highlight">not</span> trigger a contest — only Men in Blarknap does.</p>
+</section>
+
+<!-- WINNING -->
+<h2 id="winning">Winning the Game</h2>
+<div class="win-box">
+  <h3>BODY SCAN!</h3>
+  <p>Collect a number of <em>each</em> organ type equal to the number of players in the game (e.g., 3 of each in a 3-player game). Then reach the <span class="highlight">HOSPITAL</span> and take the <span class="highlight">BODY SCAN!</span> action in place of your HARVEST! phase.</p>
+  <p style="margin-top:12px;">No dice roll required. The first player to take a successful BODY SCAN! wins the game.</p>
+  <p style="margin-top:12px; color: var(--pink);">BODY SCAN! replaces HARVEST! — you cannot harvest at the Hospital and body scan on the same visit.</p>
+</div>
+
+<section style="margin-top: 30px; text-align: center; border-left-color: var(--green);">
+  <p style="color: var(--text-dim); font-size: 13px;">ILLEGAL ALIENS © Phat Phlamingo Games</p>
+</section>
+
+</div>
+</body>
+</html>
