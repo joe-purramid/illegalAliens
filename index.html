@@ -42,10 +42,10 @@ select{cursor:pointer;appearance:none}select option{background:var(--bg2);color:
 .node.step:hover{border-color:var(--purple);background:rgba(176,38,255,.15)}
 .node.step.valid{border-color:var(--green);background:rgba(57,255,20,.12);box-shadow:0 0 8px rgba(57,255,20,.3);animation:pulse 1s infinite}
 .node.step.crash{border-style:dashed;border-width:2px}
-.node.location{min-width:160px;height:50px;padding:0 16px;background:var(--bg2);border:2px solid var(--cyan);margin-left:-80px;margin-top:-25px;font-family:'Russo One',sans-serif;font-size:22px;color:var(--cyan);letter-spacing:1px;border-radius:6px;z-index:3;white-space:nowrap}
+.node.location{min-width:160px;height:62px;padding:4px 16px;background:var(--bg2);border:2px solid var(--cyan);margin-left:-80px;margin-top:-31px;font-family:'Russo One',sans-serif;font-size:22px;color:var(--cyan);letter-spacing:1px;border-radius:6px;z-index:3;white-space:nowrap;flex-direction:column;line-height:1.2}
 .node.location:hover{border-color:var(--green);color:var(--green)}
 .node.location.valid{border-color:var(--green);color:var(--green);box-shadow:0 0 12px rgba(57,255,20,.3);animation:pulse 1s infinite}
-.node.hospital{width:120px;height:52px;background:var(--bg2);border:2px solid var(--pink);margin-left:-60px;margin-top:-26px;font-family:'Creepster',cursive;font-size:22px;color:var(--pink);border-radius:8px;z-index:3}
+.node.hospital{width:140px;height:64px;background:var(--bg2);border:2px solid var(--pink);margin-left:-70px;margin-top:-32px;font-family:'Creepster',cursive;font-size:22px;color:var(--pink);border-radius:8px;z-index:3;flex-direction:column;line-height:1.2}
 .node.hospital:hover{border-color:var(--green);color:var(--green)}
 .node.hospital.valid{border-color:var(--green);color:var(--green);box-shadow:0 0 12px rgba(57,255,20,.3);animation:pulse 1s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
@@ -96,6 +96,35 @@ select{cursor:pointer;appearance:none}select option{background:var(--bg2);color:
 .modal h3{font-family:'Creepster',cursive;font-size:22px;color:var(--green);margin-bottom:12px;text-align:center}
 .pvp-panel{background:rgba(176,38,255,.05);border:1px solid var(--purple);border-radius:6px;padding:12px;margin:8px 0}
 .pvp-panel h4{font-family:'Russo One',sans-serif;font-size:12px;color:var(--purple);letter-spacing:1px;margin-bottom:6px}
+/* Opponents */
+.opp-row{padding:8px 0;border-bottom:1px solid var(--border)}
+.opp-row:last-child{border-bottom:none}
+.opp-header{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.opp-header .opp-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.opp-header .opp-name{font-family:'Russo One',sans-serif;font-size:12px;letter-spacing:1px}
+.opp-organs{display:flex;flex-wrap:wrap;gap:2px 6px;font-size:11px;color:var(--dim)}
+.opp-organs span{min-width:50px}
+.wanted-badge{display:inline-block;background:var(--pink);color:#fff;font-family:'Russo One',sans-serif;font-size:9px;padding:1px 5px;border-radius:3px;margin-left:4px;letter-spacing:1px;vertical-align:middle}
+.elim-badge{display:inline-block;background:#444;color:#888;font-family:'Russo One',sans-serif;font-size:9px;padding:1px 5px;border-radius:3px;margin-left:4px;letter-spacing:1px;vertical-align:middle}
+.active-turn{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);margin-left:4px;vertical-align:middle;box-shadow:0 0 6px var(--green)}
+/* Vasquez polish */
+.side-panel{border-left:3px solid var(--purple);position:relative;overflow:hidden}
+.side-panel::before{content:'';position:absolute;top:0;right:0;width:40px;height:40px;background:linear-gradient(135deg,transparent 50%,rgba(176,38,255,.06) 50%);pointer-events:none}
+.side-panel h3{text-shadow:1px 1px 0 rgba(0,0,0,.5);position:relative}
+.side-panel h3::after{content:'';display:block;width:30px;height:2px;background:var(--pink);margin-top:4px}
+.node.location,.node.hospital{box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.node.step{transition:all .15s,transform .1s}
+.node.step:hover{transform:scale(1.15)}
+.node.step.valid{transform:scale(1.1)}
+h1.logo{animation:logoGlitch 8s infinite}
+@keyframes logoGlitch{0%,95%,100%{text-shadow:3px 3px 0 var(--purple),-1px -1px 0 var(--pink),0 0 30px rgba(57,255,20,.3)}96%{text-shadow:5px 2px 0 var(--pink),-3px -1px 0 var(--cyan),0 0 40px rgba(57,255,20,.5)}97%{text-shadow:3px 3px 0 var(--purple),-1px -1px 0 var(--pink),0 0 30px rgba(57,255,20,.3)}98%{text-shadow:-2px 4px 0 var(--green),2px -2px 0 var(--pink),0 0 50px rgba(176,38,255,.4)}99%{text-shadow:3px 3px 0 var(--purple),-1px -1px 0 var(--pink),0 0 30px rgba(57,255,20,.3)}}
+.phase-indicator{text-shadow:0 0 10px rgba(57,255,20,.4)}
+.btn{clip-path:polygon(0 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%);position:relative}
+.btn::after{content:'';position:absolute;bottom:0;right:0;width:6px;height:6px;background:currentColor;opacity:.3;clip-path:polygon(100% 0,100% 100%,0 100%)}
+.card{clip-path:polygon(0 0,100% 0,100% calc(100% - 4px),calc(100% - 4px) 100%,0 100%)}
+.modal{clip-path:polygon(0 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%);border:2px solid var(--green)}
+.meeple-wanted{position:absolute;width:16px;height:16px;z-index:11;pointer-events:none;background:var(--pink);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;color:#fff;font-weight:bold;border:1px solid #fff}
+
 </style>
 </head>
 <body>
@@ -142,6 +171,7 @@ select{cursor:pointer;appearance:none}select option{background:var(--bg2);color:
     <div class="side-panel"><div class="turn-info" id="turn-info">Waiting...</div><div class="phase-indicator" id="phase-indicator">-</div><div id="phase-controls"></div></div>
     <div class="side-panel" id="hand-panel"><h3>Your Hand</h3><div class="hand-area" id="hand-area"></div></div>
     <div class="side-panel"><h3>Your Organs</h3><table class="organ-table" id="my-organs"><tbody></tbody></table></div>
+    <div class="side-panel" id="opponents-panel"><h3>Shipmates</h3><div id="opponents-area"></div></div>
     <div class="side-panel"><h3>Log</h3><div class="log" id="game-log"></div></div>
     <div style="text-align:center;padding:8px 0"><button class="btn small pink" onclick="confirmAbandon()">&#x1F6AA; ABANDON GAME</button></div>
   </div>
@@ -224,11 +254,15 @@ function initGame(){showScreen('game');renderBoard();if(gL.length===0){roomRef.o
 // Board render
 function renderBoard(){const svg=document.getElementById('board-svg'),c=document.getElementById('board-container');svg.innerHTML='';c.innerHTML='';const ns='http://www.w3.org/2000/svg';
   Object.entries(ADJ).forEach(([id,nb])=>{nb.forEach(nid=>{if(parseInt(id)<nid){const p1=P[parseInt(id)],p2=P[nid];const l=document.createElementNS(ns,'line');l.setAttribute('x1',p1.x);l.setAttribute('y1',p1.y);l.setAttribute('x2',p2.x);l.setAttribute('y2',p2.y);l.setAttribute('stroke','#1a1a3a');l.setAttribute('stroke-width','2');svg.appendChild(l)}})});
-  P.forEach(p=>{const d=document.createElement('div');d.id='node-'+p.id;if(p.type==='location'){d.className='node location';d.textContent=p.name}else if(p.type==='hospital'){d.className='node hospital';d.textContent=p.name}else{d.className='node step';const ci=CP.indexOf(p.id);if(ci!==-1){d.classList.add('crash');if(RD&&RD.players){const ap=Object.values(RD.players).find(pl=>pl.crashLanding===ci);if(ap&&ap.color)d.style.borderColor=COLORS[ap.color].hex}}}d.style.left=p.x+'px';d.style.top=p.y+'px';d.onclick=()=>onNodeClick(p.id);c.appendChild(d)})}
+  const LOC_PEN_TEXT={0:'-1 intestine',1:'-1 heart',2:'-1 liver',3:'-1 lung',4:'-1 kidney',5:'-1 stomach'};
+  P.forEach(p=>{const d=document.createElement('div');d.id='node-'+p.id;if(p.type==='location'){d.className='node location';d.innerHTML='<span>'+p.name+'</span><span style="font-size:10px;color:var(--pink);letter-spacing:0">'+LOC_PEN_TEXT[p.id]+'</span>'}else if(p.type==='hospital'){d.className='node hospital';d.innerHTML='<span>HOSPITAL</span><span style="font-size:9px;color:var(--pink);font-family:Russo One,sans-serif;letter-spacing:0">-1* all organs</span>'}else{d.className='node step';const ci=CP.indexOf(p.id);if(ci!==-1){d.classList.add('crash');if(RD&&RD.players){const ap=Object.values(RD.players).find(pl=>pl.crashLanding===ci);if(ap&&ap.color)d.style.borderColor=COLORS[ap.color].hex}}}d.style.left=p.x+'px';d.style.top=p.y+'px';d.onclick=()=>onNodeClick(p.id);c.appendChild(d)})}
 function meepleSVG(color){const h=COLORS[color].hex;return'<svg viewBox="0 0 24 32" xmlns="http://www.w3.org/2000/svg"><ellipse cx="12" cy="29" rx="7" ry="3" fill="rgba(0,0,0,.3)"/><path d="M12 2 C6 2 4 8 4 14 C4 18 6 22 8 25 L8 28 L16 28 L16 25 C18 22 20 18 20 14 C20 8 18 2 12 2Z" fill="'+h+'" stroke="#000" stroke-width=".5"/><circle cx="9" cy="12" r="3" fill="#fff"/><circle cx="15" cy="12" r="3" fill="#fff"/><circle cx="9" cy="12" r="1.8" fill="#111"/><circle cx="15" cy="12" r="1.8" fill="#111"/><ellipse cx="12" cy="18" rx="2" ry="1" fill="#000" opacity=".6"/></svg>'}
 function renderMeeples(){document.querySelectorAll('.meeple').forEach(m=>m.remove());if(!RD||!RD.players)return;const c=document.getElementById('board-container'),pc={};
   Object.entries(RD.players).forEach(([pid,p])=>{if(p.eliminated)return;if(!pc[p.position])pc[p.position]=[];pc[p.position].push({pid,color:p.color})});
-  Object.entries(pc).forEach(([posId,ms])=>{const n=P[parseInt(posId)];ms.forEach((m,i)=>{const d=document.createElement('div');d.className='meeple';d.innerHTML=meepleSVG(m.color);const ox=ms.length>1?(i-(ms.length-1)/2)*16:0;d.style.left=(n.x-11+ox)+'px';d.style.top=(n.y-28)+'px';c.appendChild(d)})});
+  Object.entries(pc).forEach(([posId,ms])=>{const n=P[parseInt(posId)];ms.forEach((m,i)=>{const d=document.createElement('div');d.className='meeple';d.innerHTML=meepleSVG(m.color);const ox=ms.length>1?(i-(ms.length-1)/2)*16:0;d.style.left=(n.x-11+ox)+'px';d.style.top=(n.y-28)+'px';c.appendChild(d);
+    // Wanted badge
+    const pd=RD.players[m.pid];if(pd&&pd.wanted){const wb=document.createElement('div');wb.className='meeple-wanted';wb.textContent='W';wb.style.left=(n.x+3+ox)+'px';wb.style.top=(n.y-6)+'px';c.appendChild(wb)}
+  })});
   if(RD.agentPosition!==undefined){const ap=P[RD.agentPosition];const d=document.createElement('div');d.className='meeple';d.innerHTML='<svg viewBox="0 0 24 32" xmlns="http://www.w3.org/2000/svg"><ellipse cx="12" cy="29" rx="7" ry="3" fill="rgba(0,0,0,.3)"/><rect x="4" y="4" width="16" height="22" rx="3" fill="#222" stroke="#555" stroke-width=".5"/><rect x="6" y="8" width="5" height="3" rx="1" fill="red" opacity=".8"/><rect x="13" y="8" width="5" height="3" rx="1" fill="red" opacity=".8"/><rect x="8" y="16" width="8" height="2" rx="1" fill="#555"/><rect x="5" y="2" width="14" height="5" rx="2" fill="#333" stroke="#555" stroke-width=".5"/></svg>';d.style.left=(ap.x+12)+'px';d.style.top=(ap.y-28)+'px';d.style.opacity='.9';c.appendChild(d)}}
 function renderGround(){document.querySelectorAll('.ground-badge').forEach(b=>b.remove());if(!RD||!RD.groundOrgans)return;const c=document.getElementById('board-container');
   Object.entries(RD.groundOrgans).forEach(([lid,organs])=>{const n=P[parseInt(lid)];if(!n)return;const tot=Object.values(organs).reduce((a,b)=>a+b,0);if(!tot)return;const bd=document.createElement('div');bd.className='ground-badge';bd.style.left=(n.x-30)+'px';bd.style.top=(n.y+22)+'px';Object.entries(organs).forEach(([o,cnt])=>{for(let i=0;i<cnt;i++){const p=document.createElement('div');p.className='ground-pip';p.style.background=OC[o];p.title=o;bd.appendChild(p)}});c.appendChild(bd)})}
@@ -244,21 +278,72 @@ function myD(){return RD.players[myId]}
 
 function renderSidebar(){const cp=cpD(),mine=isMT();
   document.getElementById('turn-info').innerHTML='<span style="color:'+COLORS[cp.color].hex+'">'+cp.name+"</span>'s turn"+(mine?' (YOU)':'');
-  const pn={ready:'READY!',pre_set:'PRE-SET',set:'SET!',flee:'FLEE!',flee_resolve:'FLEE!',harvest:'HARVEST!',pvp:'PVP HARVEST',agent_move:'AGENT MOVE',agent_encounter:'AGENT!',hide:'HIDE!'};
+  const pn={ready:'READY!',pre_set:'PRE-SET',set:'SET!',flee:'FLEE!',flee_resolve:'FLEE!',harvest:'HARVEST!',harvest_result:'HARVEST!',pvp:'PVP HARVEST',defender_move:'ESCAPE!',agent_move:'AGENT MOVE',agent_encounter:'AGENT!',hide:'HIDE!'};
   document.getElementById('phase-indicator').textContent=pn[RD.phase]||RD.phase||'-';
   const ctrl=document.getElementById('phase-controls');ctrl.innerHTML='';
-  renderPhaseUI(ctrl);renderHand();renderOrganTable();renderLog()}
+  renderPhaseUI(ctrl);renderHand();renderOrganTable();renderOpponents();renderLog()}
+
+function renderOpponents(){
+  const area=document.getElementById('opponents-area');if(!area)return;area.innerHTML='';
+  const tgt=RD.turnOrder.length;
+  RD.turnOrder.forEach(pid=>{
+    if(pid===myId)return;
+    const p=RD.players[pid];if(!p)return;
+    const isCurrentTurn=RD.turnOrder[RD.currentTurn]===pid;
+    const div=document.createElement('div');div.className='opp-row';
+    let header='<div class="opp-header"><div class="opp-dot" style="background:'+COLORS[p.color].hex+'"></div><span class="opp-name" style="color:'+COLORS[p.color].hex+'">'+p.name+'</span>';
+    if(p.wanted)header+='<span class="wanted-badge">WANTED</span>';
+    if(p.eliminated)header+='<span class="elim-badge">ELIMINATED</span>';
+    if(isCurrentTurn)header+='<span class="active-turn"></span>';
+    header+='</div>';
+    let organs='<div class="opp-organs">';
+    OT.forEach(o=>{const cnt=p.organs?p.organs[o]||0:0;
+      const color=cnt>=tgt?'var(--green)':cnt>0?'var(--text)':'var(--dim)';
+      organs+='<span style="color:'+color+'">'+OI[o]+cnt+'/'+tgt+'</span>'});
+    organs+='</div>';
+    div.innerHTML=header+organs;area.appendChild(div);
+  });
+}
+
 
 function renderHand(){const a=document.getElementById('hand-area');a.innerHTML='';const me=myD();
   if(!me||!me.hand||!me.hand.length){a.innerHTML='<p style="color:var(--dim);font-size:12px">No cards</p>';return}
-  me.hand.forEach((card,idx)=>{const d=document.createElement('div');d.className='card '+(card.type==='organ'?'organ-card':'guile-card');
+  // Sort: organ cards first, then guile cards, preserving order within type
+  const indexed=me.hand.map((card,idx)=>({card,idx}));
+  indexed.sort((a,b)=>a.card.type===b.card.type?0:(a.card.type==='organ'?-1:1));
+  indexed.forEach(({card,idx})=>{const d=document.createElement('div');d.className='card '+(card.type==='organ'?'organ-card':'guile-card');
     if(selCards.has(idx))d.classList.add('selected');
+    let ttip='';
+    if(card.type==='guile'){
+      const tips={
+        'Computer Guidance!':'+1 to Harvest roll','Tractor Beam!':'+2 to Harvest roll',
+        'Data Hacking!':'Steal 2 cards from alien you pass','Hollow Ween!':'Double all SET! rolls for 1 round',
+        'Immunity!':'Remove all Germs from a location','Teleporter!':'Move to any crash site before SET! roll',
+        'Anonymous Tip!':'-1 to attacker in PvP','Quadrupeds!':'-2 to attacker in PvP',
+        'Sabotage!':'Passed alien discards 2 cards / cancels Data Hack','Neighborhood Watch!':'Halve all SET! rolls for 1 round',
+        'Germs!':'Place at location: -1 to harvests','Men in Blarknap!':'Move the Agent one location'
+      };
+      ttip=' title="ALIEN: '+card.alien+' - '+(tips[card.alien]||'')+'\nAUTHORITY: '+card.authority+' - '+(tips[card.authority]||'')+'"';
+    }
     d.innerHTML='<span class="card-value'+(card.type==='guile'?' guile':'')+'">'+(card.type==='organ'?oLbl(card):gLbl(card))+'</span><span class="card-label">'+(card.type==='organ'?'ORGAN':'GUILE')+'</span>';
-    d.onclick=()=>{if(selCards.has(idx))selCards.delete(idx);else selCards.add(idx);renderHand();if(['harvest','hide'].includes(RD.phase)&&isMT()){const c=document.getElementById('phase-controls');renderPhaseUI(c)}};a.appendChild(d)})}
+    if(ttip)d.setAttribute('title',ttip.replace(/ title="/,'').replace(/"$/,''));
+    d.onclick=()=>{if(selCards.has(idx))selCards.delete(idx);else selCards.add(idx);renderHand();if(RD.phase==='hide'&&isMT()){const c=document.getElementById('phase-controls');renderPhaseUI(c)}};a.appendChild(d)})}
 
 function renderOrganTable(){const me=myD(),tb=document.querySelector('#my-organs tbody');tb.innerHTML='';if(!me)return;const tgt=RD.turnOrder.length;
+  // Wanted indicator
+  const header=tb.parentElement.previousElementSibling||null;
+  const existingBadge=document.getElementById('my-wanted-badge');if(existingBadge)existingBadge.remove();
+  if(me.wanted){const wb=document.createElement('span');wb.id='my-wanted-badge';wb.className='wanted-badge';wb.textContent='WANTED';wb.style.marginLeft='8px';
+    const h3=document.querySelector('#my-organs').closest('.side-panel').querySelector('h3');if(h3)h3.appendChild(wb)}
   OT.forEach(o=>{const tr=document.createElement('tr'),cnt=me.organs?me.organs[o]||0:0;
-    tr.innerHTML='<td>'+OL[o]+'</td><td>'+Array.from({length:6},(_,i)=>'<span style="display:inline-block;width:18px;height:18px;border:1px solid '+(i<cnt?'var(--green)':'var(--border)')+';background:'+(i<cnt?'rgba(57,255,20,.25)':'transparent')+';border-radius:2px;margin:0 2px;'+(i>=tgt?'opacity:.3':'')+'"></span>').join('')+'</td>';tb.appendChild(tr)})}
+    tr.innerHTML='<td>'+OL[o]+'</td><td>'+Array.from({length:6},(_,i)=>{
+      const filled=i<cnt;const needed=i<tgt;const beyond=i>=tgt;
+      let bg,bdr;
+      if(filled){bg='var(--green)';bdr='var(--green)'}
+      else if(needed){bg='transparent';bdr='var(--border)'}
+      else{bg='transparent';bdr='var(--border)'}
+      return'<span style="display:inline-block;width:18px;height:18px;border:1px solid '+bdr+';background:'+bg+';border-radius:2px;margin:0 2px;'+(beyond&&!filled?'opacity:.3':'')+'"></span>'
+    }).join('')+'</td>';tb.appendChild(tr)})}
 
 function renderLog(){const ld=document.getElementById('game-log');if(!RD||!RD.log)return;const e=Array.isArray(RD.log)?RD.log:Object.values(RD.log);ld.innerHTML=e.slice(-30).map(x=>'<div class="entry">'+x.text+'</div>').join('');ld.scrollTop=ld.scrollHeight}
 function addLog(t){const l=RD.log||[];roomRef.child('log').set([...l,{text:t,time:Date.now()}].slice(-50))}
@@ -372,8 +457,10 @@ function renderPhaseUI(ctrl){
   else if(phase==='flee'&&isMT())renderFlee(ctrl);
   else if(phase==='flee_resolve'&&isMT())renderFleeResolve(ctrl);
   else if(phase==='harvest'&&isMT())renderHarvest(ctrl);
+  else if(phase==='harvest_result')renderHarvestResult(ctrl);
   else if(phase==='pvp')renderPvp(ctrl);
   else if(phase==='agent_encounter')renderAgentEncounter(ctrl);
+  else if(phase==='defender_move')renderDefenderMove(ctrl);
   else if(phase==='agent_move'&&isMT())renderAgentMove(ctrl);
   else if(phase==='hide'&&isMT())renderHide(ctrl);
   else ctrl.innerHTML='<p style="text-align:center;color:var(--dim);font-size:12px;margin:8px 0">Waiting for '+cpD().name+'...</p>';
@@ -411,10 +498,10 @@ function renderSet(ctrl){
     let info='';
     if(ge.hollowWeen)info+='<p style="color:var(--yellow);font-size:11px;text-align:center">\u{1F383} Hollow Ween! active (rolls doubled)</p>';
     if(ge.neighborhoodWatch)info+='<p style="color:var(--pink);font-size:11px;text-align:center">\u{1F440} Neighborhood Watch! active (rolls halved)</p>';
-    ctrl.innerHTML=info+'<div class="dice-display" id="dice-btn" onclick="rollDice()">\u{1F3B2}</div><p style="text-align:center;color:var(--dim);font-size:12px">Click to roll</p>';
+    ctrl.innerHTML=info+'<div class="dice-display" id="dice-btn" onclick="rollDice()" style="color:'+COLORS[cpD().color].hex+'">\u{1F3B2}</div><p style="text-align:center;color:var(--dim);font-size:12px">Click to roll</p>';
   } else ctrl.innerHTML='<div class="mv-display">Movement: '+mv+'</div><div style="text-align:center;margin-top:8px"><button class="btn small" onclick="beginFlee()">BEGIN FLEE!</button></div>'}
 
-function rollDice(){const b=document.getElementById('dice-btn');if(!b)return;b.classList.add('rolling');const f=['\u2680','\u2681','\u2682','\u2683','\u2684','\u2685'];let c=0;
+function rollDice(){const b=document.getElementById('dice-btn');if(!b)return;b.classList.add('rolling');b.style.color=COLORS[cpD().color].hex;const f=['\u2680','\u2681','\u2682','\u2683','\u2684','\u2685'];let c=0;
   const iv=setInterval(()=>{b.textContent=f[Math.floor(Math.random()*6)];c++;if(c>15){clearInterval(iv);let r=Math.floor(Math.random()*6)+1;
     const ge=RD.globalEffects||{};let mod='';
     if(ge.hollowWeen){mod=' x2='+r*2;r=r*2}
@@ -427,7 +514,7 @@ function beginFlee(){selCards.clear();roomRef.update({phase:'flee',stepsThisTurn
 
 // FLEE
 function renderFlee(ctrl){const r=RD.stepsRemaining||0,m=(RD.stepsThisTurn||[]).length-1;
-  ctrl.innerHTML='<div class="mv-display">Steps left: '+r+'</div><p style="text-align:center;color:var(--dim);font-size:11px;margin:4px 0">Click a highlighted space to move</p>'+(m>=1?'<div style="text-align:center;margin-top:8px"><button class="btn small yellow" onclick="endFlee()">STOP MOVING</button></div>':'')}
+  ctrl.innerHTML='<div class="mv-display">Steps: '+r+'</div><p style="text-align:center;color:var(--dim);font-size:11px;margin:4px 0">Click any highlighted square to move there</p>'+(m>=1?'<div style="text-align:center;margin-top:8px"><button class="btn small yellow" onclick="endFlee()">STOP HERE</button></div>':'')}
 
 // FLEE RESOLVE (Data Hacking / Sabotage)
 function renderFleeResolve(ctrl){
@@ -568,10 +655,12 @@ function execLocH(){const os=document.getElementById('h-organ'),qs=document.getE
   const nh=[...hand];rem.sort((a,b)=>b-a).forEach(i=>nh.splice(i,1));
   const u={};u['players/'+pid+'/hand']=nh;
   if(ok){u['players/'+pid+'/organs/'+organ]=Math.min(6,(cp.organs[organ]||0)+qty);const ex=result-target;if(ex>0)u['groundOrgans/'+loc+'/'+organ]=(go[organ]||0)+ex;
-    addLog('<span>'+cp.name+'</span> rolled '+roll+(mod?'('+(mod>=0?'+':'')+mod+')='+result:'')+' vs '+target+'. \u2705 Gained '+qty+' '+organ+(ex>0?', '+ex+' fell':'')+'.')}
+    addLog('<span>'+cp.name+'</span> rolled '+roll+(mod?'('+(mod>=0?'+':'')+mod+')='+result:'')+' vs '+target+'. \u2705 Gained '+qty+' '+organ+(ex>0?', '+ex+' fell':'')+'.');
+    u.harvestResult={success:true,roll,mod,result,target,msg:'Gained '+qty+' '+organ+(ex>0?', '+ex+' fell to ground':'')}}
   else{const cc=cp.organs[organ]||0;if(cc>0){u['players/'+pid+'/organs/'+organ]=cc-1;u['groundOrgans/'+loc+'/'+organ]=(go[organ]||0)+1}
-    addLog('<span>'+cp.name+'</span> rolled '+roll+(mod?'('+(mod>=0?'+':'')+mod+')='+result:'')+' vs '+target+'. \u274C Failed!'+(cc>0?' Lost 1 '+organ+'.':''))}
-  u.phase='hide';selCards.clear();roomRef.update(u)}
+    addLog('<span>'+cp.name+'</span> rolled '+roll+(mod?'('+(mod>=0?'+':'')+mod+')='+result:'')+' vs '+target+'. \u274C Failed!'+(cc>0?' Lost 1 '+organ+'.':''));
+    u.harvestResult={success:false,roll,mod,result,target,msg:'Failed!'+(cc>0?' Lost 1 '+organ+' to the ground.':' No '+organ+' to lose.')}}
+  u.phase='harvest_result';selCards.clear();roomRef.update(u)}
 
 function execHospH(){const cp=cpD(),pid=cpId(),loc=6;let tq=0;const tqs={},th=[];
   OT.forEach(o=>{const el=document.getElementById('hosp-'+o);const q=el?parseInt(el.value)||0:0;if(q>0){tqs[o]=q;tq+=q;th.push(o)}});
@@ -586,12 +675,31 @@ function execHospH(){const cp=cpD(),pid=cpId(),loc=6;let tq=0;const tqs={},th=[]
   const nh=[...hand];rem.sort((a,b)=>b-a).forEach(i=>nh.splice(i,1));const u={};u['players/'+pid+'/hand']=nh;
   if(ok){Object.entries(tqs).forEach(([o,q])=>{u['players/'+pid+'/organs/'+o]=Math.min(6,(cp.organs[o]||0)+q)});
     const ex=result-target;if(ex>0){const per=Math.floor(ex/th.length);let r=ex%th.length;th.forEach(o=>{const e=per+(r>0?1:0);if(r>0)r--;if(e>0)u['groundOrgans/'+loc+'/'+o]=(go[o]||0)+e})}
-    addLog('<span>'+cp.name+'</span> rolled '+roll+'('+(mod>=0?'+':'')+mod+')='+result+' vs '+target+'. \u2705 Gained '+Object.entries(tqs).map(([o,q])=>q+' '+o).join(', ')+'.')}
+    const gMsg='Gained '+Object.entries(tqs).map(([o,q])=>q+' '+o).join(', ')+(ex>0?', '+ex+' excess to ground':'');
+    addLog('<span>'+cp.name+'</span> rolled '+roll+'('+(mod>=0?'+':'')+mod+')='+result+' vs '+target+'. \u2705 '+gMsg+'.');
+    u.harvestResult={success:true,roll,mod,result,target,msg:gMsg}}
   else{const mo=th.sort((a,b)=>tqs[b]-tqs[a])[0];const cc=cp.organs[mo]||0;if(cc>0){u['players/'+pid+'/organs/'+mo]=cc-1;u['groundOrgans/'+loc+'/'+mo]=(go[mo]||0)+1}
-    addLog('<span>'+cp.name+'</span> rolled '+roll+'('+(mod>=0?'+':'')+mod+')='+result+' vs '+target+'. \u274C Failed!')}
-  u.phase='hide';selCards.clear();roomRef.update(u)}
+    const fMsg='Failed!'+(cc>0?' Lost 1 '+mo+'.':'');
+    addLog('<span>'+cp.name+'</span> rolled '+roll+'('+(mod>=0?'+':'')+mod+')='+result+' vs '+target+'. \u274C '+fMsg);
+    u.harvestResult={success:false,roll,mod,result,target,msg:fMsg}}
+  u.phase='harvest_result';selCards.clear();roomRef.update(u)}
 
 function bodyScan(){addLog('\u{1F6F8} <span>'+cpD().name+'</span> passes the BODY SCAN! THEY WIN! \u{1F6F8}');roomRef.update({status:'finished',winner:cpId()})}
+
+function renderHarvestResult(ctrl){
+  const hr=RD.harvestResult;if(!hr){ctrl.innerHTML='';return}
+  const cls=hr.success?'success':'fail';
+  const icon=hr.success?'\u2705':'\u274C';
+  let h='<div style="text-align:center;padding:16px;margin:8px 0;border-radius:6px;background:rgba('+(hr.success?'57,255,20':'255,42,109')+',.1);border:2px solid var(--'+(hr.success?'green':'pink')+')">';
+  h+='<div style="font-family:Creepster,cursive;font-size:32px;color:var(--'+(hr.success?'green':'pink')+')">'+icon+' '+(hr.success?'SUCCESS':'FAILED')+'</div>';
+  h+='<div style="font-family:Russo One,sans-serif;font-size:18px;color:var(--text);margin:8px 0">Roll: '+hr.roll+(hr.mod?'  ('+(hr.mod>=0?'+':'')+hr.mod+') = '+hr.result:'')+'  vs  '+hr.target+'</div>';
+  h+='<div style="font-size:13px;color:var(--dim);margin:6px 0">'+hr.msg+'</div>';
+  if(isMT()) h+='<button class="btn small" onclick="dismissHarvestResult()" style="margin-top:10px">CONTINUE</button>';
+  else h+='<p style="color:var(--dim);font-size:11px;margin-top:8px">Waiting for '+cpD().name+'...</p>';
+  h+='</div>';ctrl.innerHTML=h;
+}
+function dismissHarvestResult(){roomRef.update({phase:'hide',harvestResult:null})}
+
 function skipHarvest(){addLog('<span>'+cpD().name+'</span> skips harvest.');selCards.clear();roomRef.update({phase:'hide'})}
 function getPassedAliens(){if(!RD||!RD.stepsThisTurn)return[];const st=RD.stepsThisTurn,pid=cpId(),r=[];Object.entries(RD.players).forEach(([opid,op])=>{if(opid===pid||op.eliminated)return;if(st.slice(1).includes(op.position))r.push(opid)});return r}
 
@@ -682,29 +790,28 @@ function resolvePvp(){
   const pvp=RD.pvpState;if(!pvp)return;
   const aRoll=Math.floor(Math.random()*6)+1;
   const tRoll=Math.floor(Math.random()*6)+1;
-  const aTotal=aRoll+(pvp.aMod||0)-(pvp.tMod||0);// tMod is negative modifier on attacker
+  const netMod=(pvp.aMod||0)+(pvp.tMod||0); // tMod is already negative
+  const aTotal=aRoll+netMod;
   const tTotal=tRoll;
   const attacker=RD.players[pvp.attackerId],target=RD.players[pvp.targetId];
-  const u={pvpState:null};
+  const u={};
   
-  addLog(attacker.name+' rolls '+aRoll+'(net '+(pvp.aMod||0)-(pvp.tMod||0)+')='+aTotal+' vs '+target.name+' rolls '+tRoll);
+  addLog(attacker.name+' rolls '+aRoll+(netMod?'('+(netMod>=0?'+':'')+netMod+')='+aTotal:'')+' vs '+target.name+' rolls '+tRoll);
   
   if(aTotal>tTotal){
     // Attacker wins - steal 1 organ
     const organ=pvp.organ;
     u['players/'+pvp.attackerId+'/organs/'+organ]=Math.min(6,(attacker.organs[organ]||0)+1);
     u['players/'+pvp.targetId+'/organs/'+organ]=Math.max(0,(target.organs[organ]||0)-1);
-    addLog('<span>'+attacker.name+'</span> steals 1 '+organ+' from '+target.name+'!');
-    u.phase='hide';
+    addLog('\u2705 <span>'+attacker.name+'</span> steals 1 '+organ+' from '+target.name+'!');
+    u.phase='hide';u.pvpState=null;
   } else {
-    // Target wins or ties - target gets free SET roll
-    addLog('<span>'+target.name+'</span> defends successfully! Free movement!');
-    // Give target a free move (simplified: just roll and move them)
+    // Target wins or ties - target gets free SET roll and movement
     const freeRoll=Math.floor(Math.random()*6)+1;
-    addLog('<span>'+target.name+'</span> rolls '+freeRoll+' for escape movement.');
-    // For simplicity, mark the free move as available (target moves on their UI)
-    u.phase='hide';
-    // TODO: implement free movement for defender
+    addLog('\u274C <span>'+target.name+'</span> defends! Free escape roll: '+freeRoll+'!');
+    u.phase='defender_move';
+    u.pvpState=null;
+    u.defenderMove={defenderId:pvp.targetId,stepsRemaining:freeRoll,stepsThisTurn:[target.position],originalTurnOwner:cpId()};
   }
   selCards.clear();roomRef.update(u);
 }
@@ -799,6 +906,60 @@ function agentRoll(){
   roomRef.update(u);
 }
 
+// DEFENDER FREE MOVEMENT
+function isDefender(){return RD.defenderMove&&RD.defenderMove.defenderId===myId}
+
+function renderDefenderMove(ctrl){
+  const dm=RD.defenderMove;if(!dm)return;
+  const defender=RD.players[dm.defenderId];
+  const isMe=dm.defenderId===myId;
+  const r=dm.stepsRemaining||0;
+  const moved=(dm.stepsThisTurn||[]).length-1;
+  
+  let h='<div class="pvp-panel"><h4>\u{1F3C3} FREE ESCAPE MOVEMENT</h4>';
+  h+='<p style="color:var(--dim);font-size:11px">'+defender.name+' escapes with '+r+' steps remaining</p>';
+  if(isMe){
+    h+='<p style="color:var(--cyan);font-size:11px;margin:4px 0">Click a highlighted square to move</p>';
+    if(moved>=1)h+='<div style="text-align:center;margin-top:8px"><button class="btn small yellow" onclick="endDefenderMove()">STOP HERE</button></div>';
+  } else {
+    h+='<p style="color:var(--dim);font-size:11px;text-align:center;margin:8px 0">Waiting for '+defender.name+' to move...</p>';
+  }
+  h+='<p style="color:var(--pink);font-size:10px;margin-top:6px">No harvesting during escape</p>';
+  h+='</div>';ctrl.innerHTML=h;
+}
+
+function getDefenderReachable(){
+  const dm=RD.defenderMove;if(!dm)return new Map();
+  const steps=dm.stepsRemaining||0;if(steps<=0)return new Map();
+  const defender=RD.players[dm.defenderId];
+  const start=defender.position,lv=defender.lastVisitedLocation;
+  const visitedInTurn=new Set(dm.stepsThisTurn||[]);
+  const queue=[{pos:start,left:steps,path:[],visited:new Set(visitedInTurn)}];
+  const reachable=new Map();
+  while(queue.length){
+    const{pos,left,path,visited}=queue.shift();
+    if(left<=0)continue;
+    ADJ[pos].forEach(nid=>{
+      if(visited.has(nid))return;
+      if(isPlace(nid)&&nid===lv)return;
+      const newPath=[...path,nid];
+      const newVis=new Set(visited);newVis.add(nid);
+      if(!reachable.has(nid)||newPath.length<reachable.get(nid).path.length){
+        reachable.set(nid,{path:newPath,left:left-1});
+      }
+      queue.push({pos:nid,left:left-1,path:newPath,visited:newVis});
+    });
+  }
+  return reachable;
+}
+
+function endDefenderMove(){
+  const dm=RD.defenderMove;if(!dm)return;
+  const defender=RD.players[dm.defenderId];
+  addLog('<span>'+defender.name+'</span> finishes escape move.');
+  roomRef.update({phase:'hide',defenderMove:null});
+}
+
 // HIDE
 function renderHide(ctrl){const me=myD(),hand=me.hand||[],lim=RD.handLimit||4;
   const afterD=hand.length-selCards.size,willD=Math.max(0,lim-afterD);
@@ -830,24 +991,117 @@ function nextTurn(){let n=(RD.currentTurn+1)%RD.turnOrder.length,s=0;
   addLog('<span>'+RD.players[RD.turnOrder[n]].name+"</span>'s turn begins.");
   roomRef.update({currentTurn:n,phase:'ready',movementValue:0,stepsThisTurn:[],stepsRemaining:0})}
 
-// Movement
-function getValidMoves(){if(!RD||RD.phase!=='flee'||!isMT())return[];const r=RD.stepsRemaining||0;if(r<=0)return[];
-  const cp=cpD(),vis=new Set(RD.stepsThisTurn||[]),lv=cp.lastVisitedLocation,v=[];
-  ADJ[cp.position].forEach(nid=>{if(vis.has(nid))return;if(isPlace(nid)&&nid===lv)return;v.push(nid)});return v}
-function renderValidMoves(){document.querySelectorAll('.node.valid').forEach(n=>n.classList.remove('valid'));if(!isMT()||RD.phase!=='flee')return;getValidMoves().forEach(id=>{const n=document.getElementById('node-'+id);if(n)n.classList.add('valid')})}
-function onNodeClick(nid){if(!isMT()||RD.phase!=='flee'||!getValidMoves().includes(nid))return;const pid=cpId(),st=[...(RD.stepsThisTurn||[]),nid],r=(RD.stepsRemaining||0)-1;const u={stepsThisTurn:st,stepsRemaining:r};u['players/'+pid+'/position']=nid;if(isPlace(nid))u['players/'+pid+'/lastVisitedLocation']=nid;roomRef.update(u).then(()=>{if(r<=0)setTimeout(advanceFromFlee,300)})}
+// Movement - BFS to find all reachable destinations
+function getReachablePositions(){
+  if(!RD||RD.phase!=='flee'||!isMT())return[];
+  const steps=RD.stepsRemaining||0;if(steps<=0)return[];
+  const cp=cpD(),start=cp.position,lv=cp.lastVisitedLocation;
+  const visitedInTurn=new Set(RD.stepsThisTurn||[]);
+  // BFS: state = {pos, stepsLeft, path, visited}
+  const queue=[{pos:start,left:steps,path:[],visited:new Set(visitedInTurn)}];
+  const reachable=new Map(); // posId -> {path, stepsLeft}
+  while(queue.length){
+    const{pos,left,path,visited}=queue.shift();
+    if(left<=0)continue;
+    ADJ[pos].forEach(nid=>{
+      if(visited.has(nid))return;
+      if(isPlace(nid)&&nid===lv)return;
+      const newPath=[...path,nid];
+      const newVis=new Set(visited);newVis.add(nid);
+      // This is a reachable position (must move at least 1)
+      if(!reachable.has(nid)||newPath.length<reachable.get(nid).path.length){
+        reachable.set(nid,{path:newPath,left:left-1});
+      }
+      queue.push({pos:nid,left:left-1,path:newPath,visited:newVis});
+    });
+  }
+  return reachable;
+}
+
+function renderValidMoves(){
+  document.querySelectorAll('.node.valid').forEach(n=>n.classList.remove('valid'));
+  document.querySelectorAll('.node.reachable').forEach(n=>n.classList.remove('reachable'));
+  if(RD.phase==='flee'&&isMT()){
+    const reachable=getReachablePositions();
+    reachable.forEach((_,id)=>{const n=document.getElementById('node-'+id);if(n)n.classList.add('valid')});
+  } else if(RD.phase==='defender_move'&&isDefender()){
+    const reachable=getDefenderReachable();
+    reachable.forEach((_,id)=>{const n=document.getElementById('node-'+id);if(n)n.classList.add('valid')});
+  }
+}
+
+function onNodeClick(nid){
+  // Normal FLEE movement
+  if(isMT()&&RD.phase==='flee'){
+    const reachable=getReachablePositions();
+    if(!reachable.has(nid))return;
+    const{path}=reachable.get(nid);
+    const pid=cpId(),stepsThisTurn=[...(RD.stepsThisTurn||[]),...path];
+    const remaining=(RD.stepsRemaining||0)-path.length;
+    const u={stepsThisTurn,stepsRemaining:remaining};
+    u['players/'+pid+'/position']=nid;
+    let lastLoc=cpD().lastVisitedLocation;
+    path.forEach(step=>{if(isPlace(step))lastLoc=step});
+    u['players/'+pid+'/lastVisitedLocation']=lastLoc;
+    roomRef.update(u).then(()=>{if(remaining<=0)setTimeout(advanceFromFlee,300)});
+    return;
+  }
+  // Defender escape movement
+  if(RD.phase==='defender_move'&&isDefender()){
+    const reachable=getDefenderReachable();
+    if(!reachable.has(nid))return;
+    const{path}=reachable.get(nid);
+    const dm=RD.defenderMove;
+    const pid=dm.defenderId;
+    const stepsThisTurn=[...(dm.stepsThisTurn||[]),...path];
+    const remaining=(dm.stepsRemaining||0)-path.length;
+    const u={};
+    u['defenderMove/stepsThisTurn']=stepsThisTurn;
+    u['defenderMove/stepsRemaining']=remaining;
+    u['players/'+pid+'/position']=nid;
+    let lastLoc=RD.players[pid].lastVisitedLocation;
+    path.forEach(step=>{if(isPlace(step))lastLoc=step});
+    u['players/'+pid+'/lastVisitedLocation']=lastLoc;
+    roomRef.update(u).then(()=>{if(remaining<=0)setTimeout(endDefenderMove,300)});
+    return;
+  }
+}
 function endFlee(){advanceFromFlee()}
 function advanceFromFlee(){
   const cp=cpD(),nm=isPlace(cp.position)?P[cp.position].name:'a step';
   addLog('<span>'+cp.name+'</span> stops at '+nm+'.');selCards.clear();
-  // Check if passed aliens for flee_resolve
+  const pid=cpId();
   const passed=getPassedAliens();
-  const hasHack=cp.hand&&cp.hand.some(c=>c.type==='guile'&&c.alien==='Data Hacking!');
+  
+  // Check for passive Sabotage triggers from passed aliens
+  let sabotageFired=false;
+  const cpHand=cp.hand?[...cp.hand]:[];
+  const u={stepsRemaining:0};
+  
+  passed.forEach(opid=>{
+    if(sabotageFired)return; // Only one sabotage can trigger per flee
+    const op=RD.players[opid];if(!op||!op.hand)return;
+    const sabIdx=op.hand.findIndex(c=>c.type==='guile'&&c.authority==='Sabotage!');
+    if(sabIdx!==-1){
+      // Sabotage triggers! Remove card from opponent, active player discards 2 random
+      sabotageFired=true;
+      const opHand=[...op.hand];opHand.splice(sabIdx,1);
+      u['players/'+opid+'/hand']=opHand;
+      const discarded=[];
+      for(let i=0;i<2&&cpHand.length;i++){const ri=Math.floor(Math.random()*cpHand.length);discarded.push(cpHand.splice(ri,1)[0])}
+      u['players/'+pid+'/hand']=cpHand;
+      addLog('<span>'+op.name+'</span> triggers Sabotage! <span>'+cp.name+'</span> discards '+discarded.length+' cards!');
+    }
+  });
+  
+  // Check if active player has Data Hacking for flee_resolve
+  const hasHack=cpHand.some(c=>c.type==='guile'&&c.alien==='Data Hacking!');
   if(passed.length&&hasHack){
-    roomRef.update({phase:'flee_resolve',stepsRemaining:0});
+    u.phase='flee_resolve';
   } else {
-    roomRef.update({phase:'harvest',stepsRemaining:0});
+    u.phase='harvest';
   }
+  roomRef.update(u);
 }
 
 // Abandon
