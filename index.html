@@ -41,20 +41,26 @@ select{cursor:pointer;appearance:none}select option{background:var(--bg2);color:
 .node.step{width:28px;height:28px;background:var(--bg3);border:1px solid var(--border);margin-left:-14px;margin-top:-14px}
 .node.step:hover{border-color:var(--purple);background:rgba(176,38,255,.15)}
 .node.step.valid{border-color:var(--green);background:rgba(57,255,20,.12);box-shadow:0 0 8px rgba(57,255,20,.3);animation:pulse 1s infinite}
+.node.step.preview{border-color:rgba(0,255,247,.4);background:rgba(0,255,247,.08);box-shadow:0 0 6px rgba(0,255,247,.2)}
 .node.step.crash{border-style:dashed;border-width:2px}
-.node.location{min-width:160px;height:62px;padding:4px 16px;background:var(--bg2);border:2px solid var(--cyan);margin-left:-80px;margin-top:-31px;font-family:'Russo One',sans-serif;font-size:22px;color:var(--cyan);letter-spacing:1px;border-radius:6px;z-index:3;white-space:nowrap;flex-direction:column;line-height:1.2}
-.node.location:hover{border-color:var(--green);color:var(--green)}
-.node.location.valid{border-color:var(--green);color:var(--green);box-shadow:0 0 12px rgba(57,255,20,.3);animation:pulse 1s infinite}
-.node.hospital{width:140px;height:64px;background:var(--bg2);border:2px solid var(--pink);margin-left:-70px;margin-top:-32px;font-family:'Creepster',cursive;font-size:22px;color:var(--pink);border-radius:8px;z-index:3;flex-direction:column;line-height:1.2}
-.node.hospital:hover{border-color:var(--green);color:var(--green)}
-.node.hospital.valid{border-color:var(--green);color:var(--green);box-shadow:0 0 12px rgba(57,255,20,.3);animation:pulse 1s infinite}
+.node.place-node{width:32px;height:32px;background:var(--bg3);border:2px solid var(--cyan);margin-left:-16px;margin-top:-16px;border-radius:4px;z-index:3}
+.node.place-node:hover{border-color:var(--green);background:rgba(57,255,20,.15)}
+.node.place-node.valid{border-color:var(--green);background:rgba(57,255,20,.2);box-shadow:0 0 10px rgba(57,255,20,.4);animation:pulse 1s infinite}
+.node.place-node.preview{border-color:rgba(0,255,247,.5);background:rgba(0,255,247,.12);box-shadow:0 0 8px rgba(0,255,247,.3)}
+.node.place-node.hospital-node{border-color:var(--pink)}
+.node.place-node.hospital-node:hover{border-color:var(--green)}
+.building{position:absolute;pointer-events:none;z-index:1}
+.place-label{position:absolute;z-index:3;pointer-events:none;font-family:'Russo One',sans-serif;white-space:nowrap}
+.place-label .pl-name{font-size:16px;color:var(--cyan);text-shadow:0 0 8px rgba(0,255,247,.3),1px 1px 0 rgba(0,0,0,.8);display:block}
+.place-label .pl-penalty{font-size:10px;color:var(--pink);display:block}
+.place-label.hospital .pl-name{color:var(--pink);font-family:'Creepster',cursive;font-size:18px;text-shadow:0 0 8px rgba(255,42,109,.3),1px 1px 0 rgba(0,0,0,.8)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
 .ground-badge{position:absolute;display:flex;gap:2px;z-index:4;pointer-events:none;flex-wrap:wrap;max-width:60px}
 .ground-pip{width:8px;height:8px;border-radius:50%;border:1px solid rgba(255,255,255,.3)}
 .germs-badge{position:absolute;min-width:18px;height:18px;background:var(--pink);border-radius:9px;font-size:10px;color:#fff;display:flex;align-items:center;justify-content:center;padding:0 4px;z-index:4;pointer-events:none}
 .meeple{position:absolute;width:22px;height:30px;z-index:10;pointer-events:none;transition:left .4s ease,top .4s ease;filter:drop-shadow(0 2px 3px rgba(0,0,0,.5))}
-.sidebar{width:340px;display:flex;flex-direction:column;gap:10px;flex-shrink:0;max-height:100vh;overflow-y:auto}
-.side-panel{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:14px}
+.sidebar{width:340px;display:flex;flex-direction:column;gap:10px;flex-shrink:0;max-height:100vh;overflow-y:auto;padding-bottom:20px}
+.side-panel{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:14px;flex-shrink:0}
 .side-panel h3{font-family:'Creepster',cursive;font-size:20px;color:var(--pink);margin-bottom:8px}
 .phase-indicator{font-family:'Creepster',cursive;font-size:24px;color:var(--green);text-align:center;margin:4px 0}
 .turn-info{text-align:center;font-size:13px;color:var(--dim);margin-bottom:4px}
@@ -66,9 +72,9 @@ select{cursor:pointer;appearance:none}select option{background:var(--bg2);color:
 .organ-table{width:100%;border-collapse:collapse;margin:6px 0}
 .organ-table td{padding:5px 6px;font-size:14px;border-bottom:1px solid var(--border)}
 .organ-table td:first-child{color:var(--cyan)}.organ-table td:last-child{text-align:right;color:var(--green)}
-.log{max-height:140px;overflow-y:auto;font-size:11px;color:var(--dim);line-height:1.6}
+.log{max-height:180px;overflow-y:auto;font-size:12px;color:var(--dim);line-height:1.6}
 .log .entry{padding:2px 0;border-bottom:1px solid rgba(255,255,255,.03)}.log .entry span{color:var(--yellow)}
-.hand-area{display:flex;flex-direction:column;gap:4px;margin:8px 0}
+.hand-area{display:flex;flex-direction:column;gap:4px;margin:8px 0;max-height:220px;overflow-y:auto}
 .card{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:4px;background:rgba(255,255,255,.03);cursor:pointer;transition:all .15s;font-size:12px;display:flex;justify-content:space-between;align-items:center}
 .card:hover{border-color:var(--purple);background:rgba(176,38,255,.1)}
 .card.selected{border-color:var(--green);background:rgba(57,255,20,.1);box-shadow:0 0 6px rgba(57,255,20,.2)}
@@ -263,11 +269,55 @@ function startGame(){if(!RD)return;const pids=Object.keys(RD.players),np=pids.le
 function initGame(){showScreen('game');renderBoard();if(gL.length===0){roomRef.on('value',snap=>{RD=snap.val();if(RD&&RD.status==='playing')renderGameState();else if(RD&&RD.status==='finished'){renderGameState();showModal('<h3>\u{1F6F8} '+(RD.players[RD.winner]||{name:'???'}).name+' WINS! \u{1F6F8}</h3><p style="text-align:center;color:var(--dim);margin:12px 0">They fooled the body scanner!</p><div style="text-align:center"><button class="btn" onclick="closeModal();leaveRoom()">BACK TO LOBBY</button></div>')}});gL.push(1)}}
 
 // Board render
+const BLDG_TYPE={0:'horiz',1:'horiz',2:'cyl',3:'horiz',4:'vert',5:'horiz',6:'vert'};
+// Label offsets: dx,dy from node center, text-align
+const LABEL_OFF={0:{x:-90,y:-55,a:'right'},1:{x:30,y:-55,a:'left'},2:{x:45,y:-15,a:'left'},3:{x:30,y:35,a:'left'},4:{x:-90,y:35,a:'right'},5:{x:-100,y:-15,a:'right'},6:{x:-55,y:-60,a:'center'}};
+// Building offsets from node center
+const BLDG_OFF={0:{x:-35,y:-45},1:{x:-25,y:-45},2:{x:-22,y:-50},3:{x:-25,y:5},4:{x:5,y:-50},5:{x:5,y:-45},6:{x:10,y:-55}};
+const LOC_PEN_TEXT={0:'-1 intestine',1:'-1 heart',2:'-1 liver',3:'-1 lung',4:'-1 kidney',5:'-1 stomach'};
+
+function buildingSVG(type,color){
+  const c=color,d='#1a1a3a',t='#222244',s='#15152a';
+  if(type==='horiz')return'<svg viewBox="0 0 60 45" width="60" height="45"><polygon points="5,18 5,40 50,40 50,18" fill="'+d+'" stroke="'+c+'" stroke-width="1"/><polygon points="5,18 12,10 57,10 50,18" fill="'+t+'" stroke="'+c+'" stroke-width="1"/><polygon points="50,18 57,10 57,32 50,40" fill="'+s+'" stroke="'+c+'" stroke-width="1"/><rect x="12" y="24" width="7" height="8" fill="'+c+'" opacity=".2" rx="1"/><rect x="24" y="24" width="7" height="8" fill="'+c+'" opacity=".2" rx="1"/><rect x="36" y="22" width="7" height="14" fill="'+c+'" opacity=".25" rx="1"/></svg>';
+  if(type==='vert')return'<svg viewBox="0 0 40 60" width="40" height="60"><polygon points="5,15 5,55 30,55 30,15" fill="'+d+'" stroke="'+c+'" stroke-width="1"/><polygon points="5,15 12,7 37,7 30,15" fill="'+t+'" stroke="'+c+'" stroke-width="1"/><polygon points="30,15 37,7 37,47 30,55" fill="'+s+'" stroke="'+c+'" stroke-width="1"/><rect x="10" y="20" width="6" height="6" fill="'+c+'" opacity=".2" rx="1"/><rect x="20" y="20" width="6" height="6" fill="'+c+'" opacity=".2" rx="1"/><rect x="10" y="30" width="6" height="6" fill="'+c+'" opacity=".2" rx="1"/><rect x="20" y="30" width="6" height="6" fill="'+c+'" opacity=".2" rx="1"/><rect x="10" y="40" width="6" height="6" fill="'+c+'" opacity=".2" rx="1"/><rect x="20" y="40" width="6" height="6" fill="'+c+'" opacity=".2" rx="1"/></svg>';
+  if(type==='cyl')return'<svg viewBox="0 0 44 55" width="44" height="55"><ellipse cx="22" cy="48" rx="18" ry="6" fill="'+s+'" stroke="'+c+'" stroke-width="1"/><rect x="4" y="15" width="36" height="33" fill="'+d+'" stroke="'+c+'" stroke-width="1"/><ellipse cx="22" cy="15" rx="18" ry="6" fill="'+t+'" stroke="'+c+'" stroke-width="1"/><line x1="4" y1="15" x2="4" y2="48" stroke="'+c+'" stroke-width="1"/><line x1="40" y1="15" x2="40" y2="48" stroke="'+c+'" stroke-width="1"/><rect x="14" y="25" width="6" height="8" fill="'+c+'" opacity=".2" rx="1"/><rect x="24" y="25" width="6" height="8" fill="'+c+'" opacity=".2" rx="1"/><rect x="14" y="37" width="6" height="8" fill="'+c+'" opacity=".2" rx="1"/><rect x="24" y="37" width="6" height="8" fill="'+c+'" opacity=".2" rx="1"/></svg>';
+  return'';
+}
+
 function renderBoard(){const svg=document.getElementById('board-svg'),c=document.getElementById('board-container');svg.innerHTML='';c.innerHTML='';const ns='http://www.w3.org/2000/svg';
   Object.entries(ADJ).forEach(([id,nb])=>{nb.forEach(nid=>{if(parseInt(id)<nid){const p1=P[parseInt(id)],p2=P[nid];const l=document.createElementNS(ns,'line');l.setAttribute('x1',p1.x);l.setAttribute('y1',p1.y);l.setAttribute('x2',p2.x);l.setAttribute('y2',p2.y);l.setAttribute('stroke','#1a1a3a');l.setAttribute('stroke-width','2');svg.appendChild(l)}})});
-  const LOC_PEN_TEXT={0:'-1 intestine',1:'-1 heart',2:'-1 liver',3:'-1 lung',4:'-1 kidney',5:'-1 stomach'};
-  P.forEach(p=>{const d=document.createElement('div');d.id='node-'+p.id;if(p.type==='location'){d.className='node location';d.innerHTML='<span>'+p.name+'</span><span style="font-size:10px;color:var(--pink);letter-spacing:0">'+LOC_PEN_TEXT[p.id]+'</span>'}else if(p.type==='hospital'){d.className='node hospital';d.innerHTML='<span>HOSPITAL</span><span style="font-size:9px;color:var(--pink);font-family:Russo One,sans-serif;letter-spacing:0">-1* all organs</span>'}else{d.className='node step';const ci=CP.indexOf(p.id);if(ci!==-1){d.classList.add('crash');if(RD&&RD.players){const ap=Object.values(RD.players).find(pl=>pl.crashLanding===ci);if(ap&&ap.color)d.style.borderColor=COLORS[ap.color].hex}}}d.style.left=p.x+'px';d.style.top=p.y+'px';d.onclick=()=>onNodeClick(p.id);c.appendChild(d)})}
-function meepleSVG(color){const h=COLORS[color].hex;return'<svg viewBox="0 0 24 32" xmlns="http://www.w3.org/2000/svg"><ellipse cx="12" cy="29" rx="7" ry="3" fill="rgba(0,0,0,.3)"/><path d="M12 2 C6 2 4 8 4 14 C4 18 6 22 8 25 L8 28 L16 28 L16 25 C18 22 20 18 20 14 C20 8 18 2 12 2Z" fill="'+h+'" stroke="#000" stroke-width=".5"/><circle cx="9" cy="12" r="3" fill="#fff"/><circle cx="15" cy="12" r="3" fill="#fff"/><circle cx="9" cy="12" r="1.8" fill="#111"/><circle cx="15" cy="12" r="1.8" fill="#111"/><ellipse cx="12" cy="18" rx="2" ry="1" fill="#000" opacity=".6"/></svg>'}
+  P.forEach(p=>{
+    if(p.type==='location'||p.type==='hospital'){
+      const isH=p.type==='hospital';
+      const nodeColor=isH?'var(--pink)':'var(--cyan)';
+      const bType=BLDG_TYPE[p.id];
+      const bOff=BLDG_OFF[p.id];
+      const lOff=LABEL_OFF[p.id];
+      // Building decoration
+      const bd=document.createElement('div');bd.className='building';
+      bd.innerHTML=buildingSVG(bType,isH?'#ff2a6d':'#00fff7');
+      bd.style.left=(p.x+bOff.x)+'px';bd.style.top=(p.y+bOff.y)+'px';
+      c.appendChild(bd);
+      // Label billboard
+      const lb=document.createElement('div');lb.className='place-label'+(isH?' hospital':'');
+      lb.innerHTML='<span class="pl-name">'+p.name+'</span><span class="pl-penalty">'+(isH?'-1* all organs':LOC_PEN_TEXT[p.id]||'')+'</span>';
+      lb.style.left=(p.x+lOff.x)+'px';lb.style.top=(p.y+lOff.y)+'px';lb.style.textAlign=lOff.a;
+      c.appendChild(lb);
+      // Clickable node (small square at location center)
+      const d=document.createElement('div');d.id='node-'+p.id;
+      d.className='node place-node'+(isH?' hospital-node':'');
+      d.style.left=p.x+'px';d.style.top=p.y+'px';
+      d.onclick=()=>onNodeClick(p.id);c.appendChild(d);
+    } else {
+      const d=document.createElement('div');d.id='node-'+p.id;
+      d.className='node step';
+      const ci=CP.indexOf(p.id);
+      if(ci!==-1){d.classList.add('crash');if(RD&&RD.players){const ap=Object.values(RD.players).find(pl=>pl.crashLanding===ci);if(ap&&ap.color)d.style.borderColor=COLORS[ap.color].hex}}
+      d.style.left=p.x+'px';d.style.top=p.y+'px';
+      d.onclick=()=>onNodeClick(p.id);c.appendChild(d);
+    }
+  });
+}function meepleSVG(color){const h=COLORS[color].hex;return'<svg viewBox="0 0 24 32" xmlns="http://www.w3.org/2000/svg"><ellipse cx="12" cy="29" rx="7" ry="3" fill="rgba(0,0,0,.3)"/><path d="M12 2 C6 2 4 8 4 14 C4 18 6 22 8 25 L8 28 L16 28 L16 25 C18 22 20 18 20 14 C20 8 18 2 12 2Z" fill="'+h+'" stroke="#000" stroke-width=".5"/><circle cx="9" cy="12" r="3" fill="#fff"/><circle cx="15" cy="12" r="3" fill="#fff"/><circle cx="9" cy="12" r="1.8" fill="#111"/><circle cx="15" cy="12" r="1.8" fill="#111"/><ellipse cx="12" cy="18" rx="2" ry="1" fill="#000" opacity=".6"/></svg>'}
 function renderMeeples(){document.querySelectorAll('.meeple').forEach(m=>m.remove());if(!RD||!RD.players)return;const c=document.getElementById('board-container'),pc={};
   Object.entries(RD.players).forEach(([pid,p])=>{if(p.eliminated)return;if(!pc[p.position])pc[p.position]=[];pc[p.position].push({pid,color:p.color})});
   Object.entries(pc).forEach(([posId,ms])=>{const n=P[parseInt(posId)];ms.forEach((m,i)=>{const d=document.createElement('div');d.className='meeple';d.innerHTML=meepleSVG(m.color);const ox=ms.length>1?(i-(ms.length-1)/2)*16:0;d.style.left=(n.x-11+ox)+'px';d.style.top=(n.y-28)+'px';c.appendChild(d);
@@ -510,7 +560,7 @@ function renderSet(ctrl){
     if(ge.hollowWeen)info+='<p style="color:var(--yellow);font-size:11px;text-align:center">\u{1F383} Hollow Ween! active (rolls doubled)</p>';
     if(ge.neighborhoodWatch)info+='<p style="color:var(--pink);font-size:11px;text-align:center">\u{1F440} Neighborhood Watch! active (rolls halved)</p>';
     ctrl.innerHTML=info+'<div class="dice-display" id="dice-btn" onclick="rollDice()" style="color:'+COLORS[cpD().color].hex+'">\u{1F3B2}</div><p style="text-align:center;color:var(--dim);font-size:12px">Click to roll</p>';
-  } else ctrl.innerHTML='<div class="mv-display">Movement: '+mv+'</div><div style="text-align:center;margin-top:8px"><button class="btn small" onclick="beginFlee()">BEGIN FLEE!</button></div>'}
+  } else {ctrl.innerHTML='<div class="mv-display">Movement: '+mv+'</div><p style="text-align:center;color:var(--dim);font-size:11px;margin:4px 0">Reachable squares highlighted</p><div style="text-align:center;margin-top:8px"><button class="btn small" onclick="beginFlee()">BEGIN FLEE!</button></div>';showMovePreview(mv)}}
 
 function rollDice(){const b=document.getElementById('dice-btn');if(!b)return;b.classList.add('rolling');b.style.color=COLORS[cpD().color].hex;const f=['\u2680','\u2681','\u2682','\u2683','\u2684','\u2685'];let c=0;
   const iv=setInterval(()=>{b.textContent=f[Math.floor(Math.random()*6)];c++;if(c>15){clearInterval(iv);let r=Math.floor(Math.random()*6)+1;
@@ -1029,9 +1079,29 @@ function getReachablePositions(){
   return reachable;
 }
 
+function showMovePreview(steps){
+  document.querySelectorAll('.node.preview').forEach(n=>n.classList.remove('preview'));
+  if(!isMT()||!steps)return;
+  const cp=cpD(),start=cp.position,lv=cp.lastVisitedLocation;
+  const queue=[{pos:start,left:steps,visited:new Set([start])}];
+  const reachable=new Set();
+  while(queue.length){
+    const{pos,left,visited}=queue.shift();
+    if(left<=0)continue;
+    ADJ[pos].forEach(nid=>{
+      if(visited.has(nid))return;
+      if(isPlace(nid)&&nid===lv)return;
+      reachable.add(nid);
+      const nv=new Set(visited);nv.add(nid);
+      queue.push({pos:nid,left:left-1,visited:nv});
+    });
+  }
+  reachable.forEach(id=>{const n=document.getElementById('node-'+id);if(n)n.classList.add('preview')});
+}
+
 function renderValidMoves(){
   document.querySelectorAll('.node.valid').forEach(n=>n.classList.remove('valid'));
-  document.querySelectorAll('.node.reachable').forEach(n=>n.classList.remove('reachable'));
+  document.querySelectorAll('.node.preview').forEach(n=>n.classList.remove('preview'));
   if(RD.phase==='flee'&&isMT()){
     const reachable=getReachablePositions();
     reachable.forEach((_,id)=>{const n=document.getElementById('node-'+id);if(n)n.classList.add('valid')});
