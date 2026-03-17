@@ -386,7 +386,10 @@ function renderHand(){const a=document.getElementById('hand-area');a.innerHTML='
     }
     d.innerHTML='<span class="card-value'+(card.type==='guile'?' guile':'')+'">'+(card.type==='organ'?oLbl(card):gLbl(card))+'</span><span class="card-label">'+(card.type==='organ'?'ORGAN':'GUILE')+'</span>';
     if(ttip)d.setAttribute('title',ttip.replace(/ title="/,'').replace(/"$/,''));
-    d.onclick=()=>{if(selCards.has(idx))selCards.delete(idx);else selCards.add(idx);renderHand();if(RD.phase==='hide'&&isMT()){const c=document.getElementById('phase-controls');renderPhaseUI(c)}};a.appendChild(d)})}
+    d.onclick=()=>{if(selCards.has(idx))selCards.delete(idx);else selCards.add(idx);renderHand();
+      if(RD.phase==='hide'&&isMT()){const c=document.getElementById('phase-controls');renderPhaseUI(c)}
+      if(RD.phase==='harvest'&&isMT()){if(isHosp(cpD().position))updateHP();else if(isPlace(cpD().position))updateLP()}
+    };a.appendChild(d)})}
 
 function renderOrganTable(){const me=myD(),tb=document.querySelector('#my-organs tbody');tb.innerHTML='';if(!me)return;const tgt=RD.turnOrder.length;
   // Wanted indicator
@@ -558,7 +561,7 @@ function renderSet(ctrl){
     if(ge.hollowWeen)info+='<p style="color:var(--yellow);font-size:11px;text-align:center">\u{1F383} Hollow Ween! active (rolls doubled)</p>';
     if(ge.neighborhoodWatch)info+='<p style="color:var(--pink);font-size:11px;text-align:center">\u{1F440} Neighborhood Watch! active (rolls halved)</p>';
     ctrl.innerHTML=info+'<div class="dice-display" id="dice-btn" onclick="rollDice()" style="color:'+COLORS[cpD().color].hex+'">\u{1F3B2}</div><p style="text-align:center;color:var(--dim);font-size:12px">Click to roll</p>';
-  } else {ctrl.innerHTML='<div class="mv-display">Movement: '+mv+'</div><p style="text-align:center;color:var(--dim);font-size:11px;margin:4px 0">Reachable squares highlighted</p><div style="text-align:center;margin-top:8px"><button class="btn small" onclick="beginFlee()">BEGIN FLEE!</button></div>';showMovePreview(mv)}}
+  } else {ctrl.innerHTML='<div class="mv-display">Movement: '+mv+'</div><p style="text-align:center;color:var(--dim);font-size:11px;margin:4px 0">Moving...</p>'}}
 
 function rollDice(){const b=document.getElementById('dice-btn');if(!b)return;b.classList.add('rolling');b.style.color=COLORS[cpD().color].hex;const f=['\u2680','\u2681','\u2682','\u2683','\u2684','\u2685'];let c=0;
   const iv=setInterval(()=>{b.textContent=f[Math.floor(Math.random()*6)];c++;if(c>15){clearInterval(iv);let r=Math.floor(Math.random()*6)+1;
@@ -567,9 +570,10 @@ function rollDice(){const b=document.getElementById('dice-btn');if(!b)return;b.c
     if(ge.neighborhoodWatch){const h=Math.floor(r/2);mod=' /2='+h;r=h}
     r=Math.max(1,r);
     b.textContent=f[Math.min(5,r-1)];b.classList.remove('rolling');
-    addLog('<span>'+cpD().name+'</span> rolled '+r+mod+'.');roomRef.update({movementValue:r})}},80)}
+    addLog('<span>'+cpD().name+'</span> rolled '+r+mod+'.');
+    // Auto-transition to FLEE
+    selCards.clear();roomRef.update({movementValue:r,phase:'flee',stepsThisTurn:[cpD().position],stepsRemaining:r})}},80)}
 
-function beginFlee(){selCards.clear();roomRef.update({phase:'flee',stepsThisTurn:[cpD().position],stepsRemaining:RD.movementValue})}
 
 // FLEE
 function renderFlee(ctrl){const r=RD.stepsRemaining||0,m=(RD.stepsThisTurn||[]).length-1;
@@ -675,19 +679,21 @@ function calcMods(locId,organ,isH,th,tq){
   const go=RD.groundOrgans&&RD.groundOrgans[locId]?RD.groundOrgans[locId]:{};
   if(isH){th.forEach(o=>{const gc=go[o]||0;if(gc){mod+=gc;det.push('Ground '+o+': +'+gc)}})}
   else{const gc=go[organ]||0;if(gc){mod+=gc;det.push('Ground: +'+gc)}}
-  // Organ cards
-  const hand=myD().hand||[];let cb=0;
-  selCards.forEach(idx=>{const c=hand[idx];if(c&&c.type==='organ'){
-    if(isH){th.forEach(o=>{if(c.primary===o&&c.secondary===o)cb+=2;else if(c.primary===o||c.secondary===o)cb+=1})}
-    else{if(c.primary===organ&&c.secondary===organ)cb+=2;else if(c.primary===organ||c.secondary===organ)cb+=1}}
-    // Guile harvest bonuses
+  // Count organ card bonuses and guile card bonuses separately
+  const hand=myD().hand||[];let organBonus=0,guileBonus=0;
+  selCards.forEach(idx=>{const c=hand[idx];
+    if(c&&c.type==='organ'){
+      if(isH){th.forEach(o=>{if(c.primary===o&&c.secondary===o)organBonus+=2;else if(c.primary===o||c.secondary===o)organBonus+=1})}
+      else{if(c.primary===organ&&c.secondary===organ)organBonus+=2;else if(c.primary===organ||c.secondary===organ)organBonus+=1}
+    }
     if(c&&c.type==='guile'){
-      if(c.alien==='Computer Guidance!')cb+=1;
-      if(c.alien==='Tractor Beam!')cb+=2;
+      if(c.alien==='Computer Guidance!')guileBonus+=1;
+      if(c.alien==='Tractor Beam!')guileBonus+=2;
     }
   });
-  if(!isH&&cb>tq)cb=tq;
-  if(cb){mod+=cb;det.push('Cards: +'+cb)}
+  if(!isH&&organBonus>tq)organBonus=tq;
+  if(organBonus){mod+=organBonus;det.push('Organ cards: +'+organBonus)}
+  if(guileBonus){mod+=guileBonus;det.push('Guile cards: +'+guileBonus)}
   return{mod,det}}
 
 function renderPV(target,mod,det){const need=target-mod;
@@ -706,42 +712,49 @@ function execLocH(){const os=document.getElementById('h-organ'),qs=document.getE
   const organ=os.value,qty=Math.max(1,parseInt(qs.value)||1),cp=cpD(),pid=cpId(),loc=cp.position;
   const target=Math.max(2,qty+1);const go=RD.groundOrgans&&RD.groundOrgans[loc]?RD.groundOrgans[loc]:{};
   let mod=0;const pen=LP[loc];if(pen&&pen[organ])mod+=pen[organ];if(RD.agentPosition===loc)mod-=1;mod-=(RD.germs&&RD.germs[loc])||0;mod+=(go[organ]||0);
-  const hand=cp.hand?[...cp.hand]:[];let cb=0;const rem=[];
-  [...selCards].sort((a,b)=>b-a).forEach(idx=>{const c=hand[idx];if(!c)return;
-    if(c.type==='organ'){let v=0;if(c.primary===organ&&c.secondary===organ)v=2;else if(c.primary===organ||c.secondary===organ)v=1;if(v&&cb<qty){cb+=Math.min(v,qty-cb);rem.push(idx)}}
-    if(c.type==='guile'){if(c.alien==='Computer Guidance!'){cb+=1;rem.push(idx)}if(c.alien==='Tractor Beam!'){cb+=2;rem.push(idx)}}});
+  const hand=Array.isArray(cp.hand)?[...cp.hand]:cp.hand?Object.values(cp.hand):[];
+  let cb=0;const played=new Set(selCards);
+  [...played].forEach(idx=>{const c=hand[idx];if(!c)return;
+    if(c.type==='organ'){let v=0;if(c.primary===organ&&c.secondary===organ)v=2;else if(c.primary===organ||c.secondary===organ)v=1;if(v&&cb<qty)cb+=Math.min(v,qty-cb)}
+    if(c.type==='guile'){if(c.alien==='Computer Guidance!')cb+=1;if(c.alien==='Tractor Beam!')cb+=2}});
   mod+=cb;const roll=Math.floor(Math.random()*6)+1,result=roll+mod,ok=roll!==1&&result>=target;
-  const nh=[...hand];rem.sort((a,b)=>b-a).forEach(i=>nh.splice(i,1));
-  const u={};u['players/'+pid+'/hand']=nh;
+  // Remove ALL selected cards — played cards are always spent
+  const nh=hand.filter((_,i)=>!played.has(i));
+  const u={};u['players/'+pid+'/hand']=nh.length?nh:[];
+  const logArr=[...(RD.log||[])];
   if(ok){u['players/'+pid+'/organs/'+organ]=Math.min(6,(cp.organs[organ]||0)+qty);const ex=result-target;if(ex>0)u['groundOrgans/'+loc+'/'+organ]=(go[organ]||0)+ex;
-    addLog('<span>'+cp.name+'</span> rolled '+roll+(mod?'('+(mod>=0?'+':'')+mod+')='+result:'')+' vs '+target+'. \u2705 Gained '+qty+' '+organ+(ex>0?', '+ex+' fell':'')+'.');
-    u.harvestResult={success:true,roll,mod,result,target,msg:'Gained '+qty+' '+organ+(ex>0?', '+ex+' fell to ground':'')}}
+    logArr.push({text:'<span>'+cp.name+'</span> rolled '+roll+(mod?'('+(mod>=0?'+':'')+mod+')='+result:'')+' vs '+target+'. \u2705 Gained '+qty+' '+organ+(ex>0?', '+ex+' fell':'')+'.',time:Date.now()});
+    u.harvestResult={success:true,roll,mod,result,target,msg:'Gained '+qty+' '+organ+(ex>0?', '+ex+' fell to ground':'')+'.'+(played.size?' ('+played.size+' cards played)':'')}}
   else{const cc=cp.organs[organ]||0;if(cc>0){u['players/'+pid+'/organs/'+organ]=cc-1;u['groundOrgans/'+loc+'/'+organ]=(go[organ]||0)+1}
-    addLog('<span>'+cp.name+'</span> rolled '+roll+(mod?'('+(mod>=0?'+':'')+mod+')='+result:'')+' vs '+target+'. \u274C Failed!'+(cc>0?' Lost 1 '+organ+'.':''));
-    u.harvestResult={success:false,roll,mod,result,target,msg:'Failed!'+(cc>0?' Lost 1 '+organ+' to the ground.':' No '+organ+' to lose.')}}
-  u.phase='harvest_result';selCards.clear();roomRef.update(u)}
+    logArr.push({text:'<span>'+cp.name+'</span> rolled '+roll+(mod?'('+(mod>=0?'+':'')+mod+')='+result:'')+' vs '+target+'. \u274C Failed!'+(cc>0?' Lost 1 '+organ+'.':''),time:Date.now()});
+    u.harvestResult={success:false,roll,mod,result,target,msg:'Failed!'+(cc>0?' Lost 1 '+organ+' to the ground.':' No '+organ+' to lose.')+(played.size?' ('+played.size+' cards spent)':'')}}
+  u.log=logArr.slice(-50);u.phase='harvest_result';selCards.clear();roomRef.update(u)}
 
 function execHospH(){const cp=cpD(),pid=cpId(),loc=6;let tq=0;const tqs={},th=[];
   OT.forEach(o=>{const el=document.getElementById('hosp-'+o);const q=el?parseInt(el.value)||0:0;if(q>0){tqs[o]=q;tq+=q;th.push(o)}});
   if(!tq){toast('Select organs!');return}const target=Math.max(2,tq+1);let mod=-1-th.length;
   if(RD.agentPosition===loc)mod-=1;mod-=(RD.germs&&RD.germs[loc])||0;
   const go=RD.groundOrgans&&RD.groundOrgans[loc]?RD.groundOrgans[loc]:{};th.forEach(o=>{mod+=(go[o]||0)});
-  const hand=cp.hand?[...cp.hand]:[];let cb=0;const rem=[];
-  [...selCards].sort((a,b)=>b-a).forEach(idx=>{const c=hand[idx];if(!c)return;
-    if(c.type==='organ'){th.forEach(o=>{if(c.primary===o&&c.secondary===o)cb+=2;else if(c.primary===o||c.secondary===o)cb+=1});rem.push(idx)}
-    if(c.type==='guile'){if(c.alien==='Computer Guidance!'){cb+=1;rem.push(idx)}if(c.alien==='Tractor Beam!'){cb+=2;rem.push(idx)}}});
+  const hand=Array.isArray(cp.hand)?[...cp.hand]:cp.hand?Object.values(cp.hand):[];
+  let cb=0;const played=new Set(selCards);
+  [...played].forEach(idx=>{const c=hand[idx];if(!c)return;
+    if(c.type==='organ'){th.forEach(o=>{if(c.primary===o&&c.secondary===o)cb+=2;else if(c.primary===o||c.secondary===o)cb+=1})}
+    if(c.type==='guile'){if(c.alien==='Computer Guidance!')cb+=1;if(c.alien==='Tractor Beam!')cb+=2}});
   mod+=cb;const roll=Math.floor(Math.random()*6)+1,result=roll+mod,ok=roll!==1&&result>=target;
-  const nh=[...hand];rem.sort((a,b)=>b-a).forEach(i=>nh.splice(i,1));const u={};u['players/'+pid+'/hand']=nh;
+  // Remove ALL selected cards — played cards are always spent
+  const nh=hand.filter((_,i)=>!played.has(i));
+  const u={};u['players/'+pid+'/hand']=nh.length?nh:[];
+  const logArr=[...(RD.log||[])];
   if(ok){Object.entries(tqs).forEach(([o,q])=>{u['players/'+pid+'/organs/'+o]=Math.min(6,(cp.organs[o]||0)+q)});
     const ex=result-target;if(ex>0){const per=Math.floor(ex/th.length);let r=ex%th.length;th.forEach(o=>{const e=per+(r>0?1:0);if(r>0)r--;if(e>0)u['groundOrgans/'+loc+'/'+o]=(go[o]||0)+e})}
     const gMsg='Gained '+Object.entries(tqs).map(([o,q])=>q+' '+o).join(', ')+(ex>0?', '+ex+' excess to ground':'');
-    addLog('<span>'+cp.name+'</span> rolled '+roll+'('+(mod>=0?'+':'')+mod+')='+result+' vs '+target+'. \u2705 '+gMsg+'.');
+    logArr.push({text:'<span>'+cp.name+'</span> rolled '+roll+'('+(mod>=0?'+':'')+mod+')='+result+' vs '+target+'. \u2705 '+gMsg+'.',time:Date.now()});
     u.harvestResult={success:true,roll,mod,result,target,msg:gMsg}}
   else{const mo=th.sort((a,b)=>tqs[b]-tqs[a])[0];const cc=cp.organs[mo]||0;if(cc>0){u['players/'+pid+'/organs/'+mo]=cc-1;u['groundOrgans/'+loc+'/'+mo]=(go[mo]||0)+1}
     const fMsg='Failed!'+(cc>0?' Lost 1 '+mo+'.':'');
-    addLog('<span>'+cp.name+'</span> rolled '+roll+'('+(mod>=0?'+':'')+mod+')='+result+' vs '+target+'. \u274C '+fMsg);
-    u.harvestResult={success:false,roll,mod,result,target,msg:fMsg}}
-  u.phase='harvest_result';selCards.clear();roomRef.update(u)}
+    logArr.push({text:'<span>'+cp.name+'</span> rolled '+roll+'('+(mod>=0?'+':'')+mod+')='+result+' vs '+target+'. \u274C '+fMsg,time:Date.now()});
+    u.harvestResult={success:false,roll,mod,result,target,msg:fMsg+(played.size?' ('+played.size+' cards spent)':'')}}
+  u.log=logArr.slice(-50);u.phase='harvest_result';selCards.clear();roomRef.update(u)}
 
 function bodyScan(){addLog('\u{1F6F8} <span>'+cpD().name+'</span> passes the BODY SCAN! THEY WIN! \u{1F6F8}');roomRef.update({status:'finished',winner:cpId()})}
 
