@@ -419,15 +419,15 @@ function getGuileActions(){
     // Alien effects (own turn only)
     if(isMT()){
       if(c.alien==='Teleporter!'&&phase==='set'&&!RD.movementValue)acts.push({idx,side:'alien',name:'Teleporter!',desc:'Move to any crash site before rolling'});
-      if(c.alien==='Hollow Ween!'&&['ready','set','flee','harvest'].includes(phase))acts.push({idx,side:'alien',name:'Hollow Ween!',desc:'Double all SET! rolls for 1 round'});
-      if(c.alien==='Immunity!'&&['ready','set','flee','harvest'].includes(phase))acts.push({idx,side:'alien',name:'Immunity!',desc:'Remove all Germs from a location'});
+      if(c.alien==='Hollow Ween!'&&['ready','set','flee','harvest','harvest_result'].includes(phase))acts.push({idx,side:'alien',name:'Hollow Ween!',desc:'Double all SET! rolls for 1 round'});
+      if(c.alien==='Immunity!'&&['ready','set','flee','harvest','harvest_result'].includes(phase))acts.push({idx,side:'alien',name:'Immunity!',desc:'Remove all Germs from a location'});
       // Computer Guidance/Tractor Beam handled via card selection during harvest
     }
     // Authority effects (own turn for proactive ones)
     if(isMT()){
-      if(c.authority==='Germs!'&&['ready','set','flee','harvest'].includes(phase))acts.push({idx,side:'authority',name:'Germs!',desc:'Place at a location (-1 harvest)'});
-      if(c.authority==='Neighborhood Watch!'&&['ready','set','flee','harvest'].includes(phase))acts.push({idx,side:'authority',name:'Neighborhood Watch!',desc:'Halve all SET! rolls for 1 round'});
-      if(c.authority==='Men in Blarknap!'&&['ready','set','flee','harvest'].includes(phase))acts.push({idx,side:'authority',name:'Men in Blarknap!',desc:'Move the Agent one location'});
+      if(c.authority==='Germs!'&&['ready','set','flee','harvest','harvest_result'].includes(phase))acts.push({idx,side:'authority',name:'Germs!',desc:'Place at a location (-1 harvest)'});
+      if(c.authority==='Neighborhood Watch!'&&['ready','set','flee','harvest','harvest_result'].includes(phase))acts.push({idx,side:'authority',name:'Neighborhood Watch!',desc:'Halve all SET! rolls for 1 round'});
+      if(c.authority==='Men in Blarknap!'&&['ready','set','flee','harvest','harvest_result'].includes(phase))acts.push({idx,side:'authority',name:'Men in Blarknap!',desc:'Move the Agent one location'});
     }
   });
   return acts;
@@ -493,18 +493,15 @@ function execImmunity(locId){const g=RD.germs||{};g[locId]=0;roomRef.update({ger
 function execGerms(locId){const g=RD.germs||{};g[locId]=(g[locId]||0)+1;roomRef.update({germs:g});addLog('Germs placed at '+LOC_NAMES[locId]+'! (\u{1F9A0}'+(g[locId])+')')}
 
 function execAgent(destId){
-  // Move agent, check for aliens on path and at destination
-  const oldPos=RD.agentPosition;
-  // Find aliens at destination or on the spoke/ring between old and new
   const affected=[];
   Object.entries(RD.players).forEach(([pid,p])=>{
     if(p.eliminated)return;
     if(p.position===destId)affected.push(pid);
-    // Check intermediate steps (simplified: just destination for now)
   });
   const u={agentPosition:destId};
   if(affected.length){
     u.agentEncounter={aliens:affected,currentIdx:0};
+    u.savedPhase=RD.phase; // Save current phase to return to after encounter
     u.phase='agent_encounter';
   }
   roomRef.update(u);
@@ -527,7 +524,7 @@ function renderPhaseUI(ctrl){
   else if(phase==='hide'&&isMT())renderHide(ctrl);
   else ctrl.innerHTML='<p style="text-align:center;color:var(--dim);font-size:12px;margin:8px 0">Waiting for '+cpD().name+'...</p>';
   // Add guile bar for active player on applicable phases
-  if(isMT()&&['ready','set','flee','harvest'].includes(phase))renderGuileBar(ctrl);
+  if(isMT()&&['ready','set','flee','harvest','harvest_result'].includes(phase))renderGuileBar(ctrl);
 }
 
 // READY
@@ -766,7 +763,7 @@ function renderHarvestResult(ctrl){
   h+='<div style="font-family:Creepster,cursive;font-size:32px;color:var(--'+(hr.success?'green':'pink')+')">'+icon+' '+(hr.success?'SUCCESS':'FAILED')+'</div>';
   h+='<div style="font-family:Russo One,sans-serif;font-size:18px;color:var(--text);margin:8px 0">Roll: '+hr.roll+(hr.mod?'  ('+(hr.mod>=0?'+':'')+hr.mod+') = '+hr.result:'')+'  vs  '+hr.target+'</div>';
   h+='<div style="font-size:13px;color:var(--dim);margin:6px 0">'+hr.msg+'</div>';
-  if(isMT()) h+='<button class="btn small" onclick="dismissHarvestResult()" style="margin-top:10px">CONTINUE</button>';
+  if(isMT()) h+='<button class="btn small" onclick="dismissHarvestResult()" style="margin-top:10px">END HARVEST</button>';
   else h+='<p style="color:var(--dim);font-size:11px;margin-top:8px">Waiting for '+cpD().name+'...</p>';
   h+='</div>';ctrl.innerHTML=h;
 }
@@ -932,7 +929,7 @@ function agentEscape(posId){
   // Advance to next alien or finish
   const nextIdx=enc.currentIdx+1;
   if(nextIdx<enc.aliens.length){u['agentEncounter/currentIdx']=nextIdx}
-  else{u.agentEncounter=null;u.phase=RD.savedPhase||'harvest'}
+  else{u.agentEncounter=null;u.phase=RD.savedPhase||'set';u.savedPhase=null}
   roomRef.update(u);
 }
 
@@ -943,38 +940,45 @@ function agentRoll(){
   const pRoll=Math.floor(Math.random()*6)+1;
   const aRoll=Math.floor(Math.random()*6)+1;
   const u={};
+  const nextIdx=enc.currentIdx+1;
+  const hasMore=nextIdx<enc.aliens.length;
   
   if(pRoll>aRoll){
-    // Player wins - free escape
-    addLog('<span>'+alien.name+'</span> rolls '+pRoll+' vs Agent '+aRoll+'. Escapes!');
+    // Player wins - free escape movement
     const freeRoll=Math.floor(Math.random()*6)+1;
-    addLog('<span>'+alien.name+'</span> gets free movement ('+freeRoll+' steps).');
+    addLog('<span>'+alien.name+'</span> rolls '+pRoll+' vs Agent '+aRoll+'. Escapes! Free movement: '+freeRoll+' steps.');
+    if(hasMore){
+      // More aliens to resolve first, then give this player their free move
+      u['agentEncounter/currentIdx']=nextIdx;
+    } else {
+      // Last alien — give free movement now
+      u.agentEncounter=null;
+      u.phase='defender_move';
+      u.defenderMove={defenderId:pid,stepsRemaining:freeRoll,stepsThisTurn:[alien.position],originalTurnOwner:cpId()};
+    }
   } else {
     // Agent wins - sent to hospital
     addLog('<span>'+alien.name+'</span> rolls '+pRoll+' vs Agent '+aRoll+'. Caught!');
-    u['players/'+pid+'/position']=6; // Hospital
+    u['players/'+pid+'/position']=6;
+    u['players/'+pid+'/lastVisitedLocation']=6;
     
-    // Check if player has all organ types
     const hasAll=OT.every(o=>(alien.organs[o]||0)>=1);
     if(hasAll){
-      // Lose organ with least count
       let minOrgan=OT[0],minCount=alien.organs[OT[0]]||0;
       OT.forEach(o=>{const c=alien.organs[o]||0;if(c<minCount){minCount=c;minOrgan=o}});
       u['players/'+pid+'/organs/'+minOrgan]=Math.max(0,minCount-1);
       addLog('<span>'+alien.name+'</span> loses 1 '+minOrgan+'! (removed from game)');
     } else if(alien.wanted){
-      // Second offense without all organs - eliminated!
       u['players/'+pid+'/eliminated']=true;
       addLog('<span>'+alien.name+'</span> is ELIMINATED! Caught twice without full organs!');
     } else {
       u['players/'+pid+'/wanted']=true;
       addLog('<span>'+alien.name+'</span> gets a WANTED token!');
     }
+    // Advance to next alien or return to saved phase
+    if(hasMore){u['agentEncounter/currentIdx']=nextIdx}
+    else{u.agentEncounter=null;u.phase=RD.savedPhase||'set'}
   }
-  // Advance to next alien
-  const nextIdx=enc.currentIdx+1;
-  if(nextIdx<enc.aliens.length){u['agentEncounter/currentIdx']=nextIdx}
-  else{u.agentEncounter=null;u.phase=RD.savedPhase||'harvest'}
   roomRef.update(u);
 }
 
@@ -1029,7 +1033,9 @@ function endDefenderMove(){
   const dm=RD.defenderMove;if(!dm)return;
   const defender=RD.players[dm.defenderId];
   addLog('<span>'+defender.name+'</span> finishes escape move.');
-  roomRef.update({phase:'hide',defenderMove:null});
+  // If this was from an agent encounter, return to saved phase; otherwise go to hide (PvP)
+  const returnPhase=RD.savedPhase||'hide';
+  roomRef.update({phase:returnPhase,defenderMove:null,savedPhase:null});
 }
 
 // HIDE
